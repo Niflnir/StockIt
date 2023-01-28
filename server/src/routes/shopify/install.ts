@@ -4,15 +4,15 @@ import { BadRequestError } from "../../utils/utils";
 
 const router = express.Router();
 
-router.get("/shopify", async (req: Request, res: Response) => {
+router.get("/api/shopify", async (req: Request, res: Response) => {
   const shopName = req.query.shop;
-  const forwardingAddress = "https://53e7-111-65-45-243.ap.ngrok.io";
+  const forwardingAddress = process.env.domain;
   const apiKey = process.env.SHOPIFY_API_KEY;
   const scopes = "write_products";
 
   if (shopName) {
     const shopState = crypto.randomBytes(16).toString("hex");
-    const redirectURL = forwardingAddress + "/shopify/callback";
+    const redirectURL = forwardingAddress + "/api/shopify/callback";
     const installUrl =
       "https://" +
       shopName +

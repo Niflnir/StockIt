@@ -6,7 +6,7 @@ import { BadRequestError } from "../../utils/utils";
 
 const router = express.Router();
 
-router.get("/shopify/callback", async (req: Request, res: Response) => {
+router.get("/api/shopify/callback", async (req: Request, res: Response) => {
   const apiSecret = process.env.SHOPIFY_API_SECRET;
   const { shop, hmac, code, state } = req.query;
   const stateCookie = req.cookies.state;

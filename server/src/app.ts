@@ -11,6 +11,9 @@ import { resetPasswordRouter } from "./routes/auth/reset-password";
 import { verifyTokenRouter } from "./routes/auth/verify-token";
 import { installRouter } from "./routes/shopify/install";
 import { accessTokenShopifyRouter } from "./routes/shopify/access-token-shopify";
+import { accessEbayRouter } from "./routes/ebay/access";
+import { callbackEbayRouter } from "./routes/ebay/callback";
+import { logoutRouter } from "./routes/auth/logout";
 
 const app = express();
 
@@ -30,10 +33,14 @@ app.use(signupRouter);
 app.use(verifyTokenRouter);
 app.use(forgotPasswordRouter);
 app.use(resetPasswordRouter);
+app.use(logoutRouter);
 
 // Shopify
 app.use(installRouter);
 app.use(accessTokenShopifyRouter);
+
+app.use(accessEbayRouter);
+app.use(callbackEbayRouter);
 
 app.all("*", async (_req, _res) => {
   throw new NotFoundError();

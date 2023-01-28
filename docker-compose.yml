@@ -1,0 +1,43 @@
+version: "3"
+services:
+  client:
+    build: ./client/
+    image: niflnir/stockitclient:latest
+    environment:
+      PORT: 3000
+    ports:
+      - 3000:3000
+    volumes:
+      - ./client:/app
+    networks:
+      - app-network
+  server:
+    build: ./server/
+    image: niflnir/stockitserver:latest
+    environment:
+      JWT_KEY: ${JWT_KEY}
+      MONGO_URI: ${MONGO_URI}
+      USER_EMAIL: ${USER_EMAIL}
+      USER_PASSWORD: ${USER_PASSWORD}
+      SHOPIFY_API_KEY: ${SHOPIFY_API_KEY}
+      SHOPIFY_API_SECRET: ${SHOPIFY_API_SECRET}
+      EBAY_APP_ID: ${EBAY_APP_ID}
+      EBAY_CERT_ID: ${EBAY_CERT_ID}
+      PORT: 8080
+    ports:
+      - 8080:8080
+    volumes:
+      - ./server:/app
+    networks:
+      - app-network
+  proxy:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
