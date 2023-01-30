@@ -14,7 +14,7 @@ router.get(
     }
 
     // it has to include localhost so that nginx can redirect to the frontend
-    res.redirect("http://localhost/auth/reset");
+    res.redirect("http://localhost/resetpassword");
   }
 );
 

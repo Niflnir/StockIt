@@ -1,6 +1,7 @@
 version: "3"
 services:
   client:
+    container_name: client
     build: ./client/
     image: niflnir/stockitclient:latest
     environment:
@@ -12,6 +13,7 @@ services:
     networks:
       - app-network
   server:
+    container_name: server
     build: ./server/
     image: niflnir/stockitserver:latest
     environment:
@@ -30,12 +32,16 @@ services:
       - ./server:/app
     networks:
       - app-network
-  proxy:
-    image: nginx
+  nginx:
+    container_name: nginx
+    image: nginx:latest
     ports:
       - 80:80
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - client
+      - server
     networks:
       - app-network
 networks:
