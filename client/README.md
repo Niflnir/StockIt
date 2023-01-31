@@ -109,6 +109,21 @@ npm run serve
 npm run build
 ```
 [More Details...](https://templates.iqonic.design/hope-ui/documentation/html/dist/main/gulp.html)
+
+## Error Fix
+```
+ error  in ./node_modules/bootstrap/js/src/util/index.js
+
+Module parse failed: Identifier directly after number (8:17)
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
+|  */
+|
+> const MAX_UID = 1_000_000
+
+```
+- Update "const MAX_UID = 1_000_000" to "const MAX_UID = 1000000"
+
+
 ## Documentation
 You can find our documentation [here](https://templates.iqonic.design/hope-ui/documentation/html/dist/main/).
 
