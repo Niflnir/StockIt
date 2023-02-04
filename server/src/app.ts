@@ -14,6 +14,12 @@ import { accessTokenShopifyRouter } from "./routes/shopify/access-token-shopify"
 import { accessEbayRouter } from "./routes/ebay/access";
 import { callbackEbayRouter } from "./routes/ebay/callback";
 import { logoutRouter } from "./routes/auth/logout";
+import { callbackLazadaRouter } from "./routes/lazada/callback";
+import { ebayAddProductRouter } from "./routes/ebay/inventory/addProduct";
+import { ebayDeleteProductRouter } from "./routes/ebay/inventory/deleteProduct";
+import { ebayListProductsRouter } from "./routes/ebay/inventory/listProducts";
+import { ebayAddOfferRouter } from "./routes/ebay/offer/addOffer";
+import { ebayListOffersRouter } from "./routes/ebay/offer/listOffers";
 
 const app = express();
 
@@ -39,8 +45,17 @@ app.use(logoutRouter);
 app.use(installRouter);
 app.use(accessTokenShopifyRouter);
 
+// Ebay
 app.use(accessEbayRouter);
 app.use(callbackEbayRouter);
+app.use(ebayAddProductRouter);
+app.use(ebayDeleteProductRouter);
+app.use(ebayListProductsRouter);
+app.use(ebayAddOfferRouter);
+app.use(ebayListOffersRouter);
+
+// Lazada
+app.use(callbackLazadaRouter);
 
 app.all("*", async (_req, _res) => {
   throw new NotFoundError();

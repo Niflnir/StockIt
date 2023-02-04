@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/api/shopify", async (req: Request, res: Response) => {
   const shopName = req.query.shop;
-  const forwardingAddress = process.env.domain;
+  const forwardingAddress = process.env.DOMAIN;
   const apiKey = process.env.SHOPIFY_API_KEY;
   const scopes = "write_products";
 
