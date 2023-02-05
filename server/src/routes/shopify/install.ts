@@ -32,4 +32,4 @@ router.get("/api/shopify", async (req: Request, res: Response) => {
   }
 });
 
-export { router as installRouter };
+export { router as shopifyInstallRouter };

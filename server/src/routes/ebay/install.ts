@@ -19,4 +19,4 @@ router.get("/api/ebay", requireAuth, async (req: Request, res: Response) => {
   res.send({ url: url });
 });
 
-export { router as accessEbayRouter };
+export { router as ebayInstallRouter };

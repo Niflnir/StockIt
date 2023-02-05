@@ -35,24 +35,21 @@ router.get("/api/ebay/callback", async (req: Request, res: Response) => {
   console.log(response.data);
 
   const accessToken = response.data.access_token;
-  const refreshToken = response.data.refresh_token;
-  const shop = "ebay";
   const existingAccessToken = await AccessToken.findOne({
     userId: req.currentUser!.id,
-    shop: shop,
+    shop: "ebay",
   });
 
   if (!existingAccessToken) {
     const newAccessToken = AccessToken.build({
       userId: req.currentUser!.id,
       token: accessToken,
-      refreshToken: refreshToken,
       shop: "ebay",
       createdAt: new Date(Date.now()),
     });
     await newAccessToken.save();
   }
-  res.status(201).send(`Succesfully connected to ${shop} store`);
+  res.status(201).send(`Succesfully connected to ebay store`);
 });
 
-export { router as callbackEbayRouter };
+export { router as ebayCallbackRouter };

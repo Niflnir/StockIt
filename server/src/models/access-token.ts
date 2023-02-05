@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 interface AccessTokenAttrs {
   userId: string;
   token: string;
-  refreshToken: string;
   shop: string;
   createdAt: Date;
 }
@@ -21,7 +20,6 @@ interface AccessTokenModel extends mongoose.Model<AccessTokenDoc> {
 interface AccessTokenDoc extends mongoose.Document {
   userId: string;
   token: string;
-  refreshToken: string;
   shop: string;
   createdAt: Date;
 }
@@ -36,10 +34,6 @@ const accessTokenSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    refreshToken: {
-      type: String,
-      required: true,
-    },
     shop: {
       type: String,
       required: true,
@@ -47,7 +41,7 @@ const accessTokenSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      expires: 3600, // this is the expiry time in seconds
+      expires: 7200, // this is the expiry time in seconds
     },
   },
   {
