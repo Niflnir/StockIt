@@ -74,10 +74,34 @@ const defaultchildRoutes = (prop, mode = false) => [
     component: () => import('../views/main/dashboard')
   },
   {
-    path: 'troll',
-    name: prop + '.troll',
-    meta: { auth: true, name: 'troll' },
+    path: 'import',
+    name: prop + '.importexport',
+    meta: { auth: true, name: 'importexport' },
     component: () => import('../views/main/TestHome')
+  },
+  {
+    path: 'products',
+    name: prop + '.products',
+    meta: { auth: true, name: 'products' },
+    component: () => import('../views/main/Products')
+  },
+  {
+    path: 'platforms',
+    name: prop + '.platforms',
+    meta: { auth: true, name: 'platforms' },
+    component: () => import('../views/main/Platforms')
+  },
+  {
+    path: 'support',
+    name: prop + '.support',
+    meta: { auth: true, name: 'support' },
+    component: () => import('../views/main/Support')
+  },
+  {
+    path: 'settings',
+    name: prop + '.settings',
+    meta: { auth: true, name: 'settings' },
+    component: () => import('../views/main/Settings')
   }
 ]
 

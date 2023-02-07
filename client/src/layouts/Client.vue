@@ -6,11 +6,8 @@
         <div class="title">Overview</div>
         <div class="profile">
           <div class="profilename">Bobbilicious The Third</div>
-          <div class="profilepic">
-
-          </div>
+          <img src="../assets/images/avatars/avtar_1.png" class="profilepic" alt="Avatar">
         </div>
-        <div style="clear:both"></div>
       </div>
       <router-view />
     </div>
@@ -22,12 +19,6 @@ import Navbar from '../views/main/Navbar.vue'
 </script>
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=Mulish&display=swap');
-// :root {
-//   --dark: #363740;
-//   --dark-alt: #4d4f5d;
-//   --light: #f1f5f9;
-//   --sidebar-width: 270px;
-// }
 .app {
   display: flex;
   main {
@@ -50,15 +41,27 @@ import Navbar from '../views/main/Navbar.vue'
     letter-spacing: 1px;
     font-size: 26px;
     color: #454648;
+    width: 67vw;
   }
   .profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     .profilename {
       font-family: 'Mulish', sans-serif;
       font-weight: 800;
       letter-spacing: 1px;
       font-size: 15px;
-      width: 70vw;
       color: #454648;
+      max-width: 10vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    img {
+      border-radius: 50%;
+      height: 50px;
+      width: 50px;
     }
   }
 }

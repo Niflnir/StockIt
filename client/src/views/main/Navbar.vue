@@ -14,7 +14,7 @@
             <span class="text">Overview</span>
           </div>
         </router-link>
-        <router-link class="button" to="/default/troll">
+        <router-link class="button" to="/default/import">
           <div class="container">
             <div class="icon">
               <font-awesome-icon icon="fa-fw fa-solid fa-ticket" />
@@ -22,7 +22,7 @@
             <span class="text">Import / Export</span>
           </div>
         </router-link>
-        <router-link class="button" to="/products">
+        <router-link class="button" to="/default/products">
           <div class="container">
             <div class="icon">
               <font-awesome-icon icon="fa-fw fa-solid fa-tag" />
@@ -30,7 +30,7 @@
             <span class="text">Products</span>
           </div>
         </router-link>
-        <router-link class="button" to="/platforms">
+        <router-link class="button" to="/default/platforms">
           <div class="container">
             <div class="icon">
               <font-awesome-icon icon="fa-fw fa-solid fa-user-group" />
@@ -38,7 +38,7 @@
             <span class="text">Platforms</span>
           </div>
         </router-link>
-        <router-link class="button" to="/support">
+        <router-link class="button" to="/default/support">
           <div class="container">
             <div class="icon">
               <font-awesome-icon icon="fa-fw fa-solid fa-user" />
@@ -47,7 +47,7 @@
           </div>
         </router-link>
         <hr class="divider">
-        <router-link class="button" to="/settings">
+        <router-link class="button" to="/default/settings">
           <div class="container">
             <div class="icon">
               <font-awesome-icon icon="fa-fw fa-solid fa-gear" />
