@@ -7,7 +7,7 @@ import { uuid } from "uuidv4";
 const router = express.Router();
 
 router.put(
-  "/api/shopify/product/:shop",
+  "/api/shopify/products/:shop",
   requireAuth,
   async (req: Request, res: Response) => {
     const { productId, title, description, price, quantity, status } = req.body;

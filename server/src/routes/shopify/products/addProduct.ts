@@ -7,9 +7,10 @@ import { uuid } from "uuidv4";
 const router = express.Router();
 
 router.post(
-  "/api/shopify/product/:shop",
+  "/api/shopify/products/:shop",
   requireAuth,
   async (req: Request, res: Response) => {
+    // quantity is a number, everything else is a string
     const { title, description, price, quantity, status } = req.body;
     const shop = req.params.shop;
     const existingAccessToken = await AccessToken.findOne({
@@ -41,8 +42,12 @@ router.post(
     };
 
     try {
-      await axios.post(apiRequestURL, payload, {
+      const response = await axios.post(apiRequestURL, payload, {
         headers: apiRequestHeaders,
+      });
+      return res.status(201).send({
+        productId: response.data.product.variants.product_id,
+        message: "Successfully added product to Shopify store",
       });
     } catch (err) {
       if (isAxiosError(err)) {
@@ -50,7 +55,6 @@ router.post(
       }
       return new BadRequestError("Error adding product to Shopify store");
     }
-    return res.status(201).send("Successfully added product to Shopify store");
   }
 );
 

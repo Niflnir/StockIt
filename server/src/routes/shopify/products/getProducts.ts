@@ -6,7 +6,7 @@ import { AccessToken } from "../../../models/access-token";
 const router = express.Router();
 
 router.get(
-  "/api/shopify/product/:shop",
+  "/api/shopify/products/:shop",
   requireAuth,
   async (req: Request, res: Response) => {
     const shop = req.params.shop;

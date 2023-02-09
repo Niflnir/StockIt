@@ -49,7 +49,7 @@ router.get("/api/ebay/callback", async (req: Request, res: Response) => {
     });
     await newAccessToken.save();
   }
-  res.status(201).send(`Succesfully connected to ebay store`);
+  res.status(200).send(`Succesfully connected to ebay store`);
 });
 
 export { router as ebayCallbackRouter };

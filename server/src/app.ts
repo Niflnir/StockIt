@@ -20,10 +20,13 @@ import { ebayAddOfferRouter } from "./routes/ebay/offer/addOffer";
 import { ebayListOffersRouter } from "./routes/ebay/offer/listOffers";
 import { ebayInstallRouter } from "./routes/ebay/install";
 import { ebayCallbackRouter } from "./routes/ebay/callback";
-import { callbackLazadaRouter } from "./routes/lazada/callback";
+import { lazadaCallbackRouter } from "./routes/lazada/callback";
 import { shopifyAddProductRouter } from "./routes/shopify/products/addProduct";
 import { shopifyDeleteProductRouter } from "./routes/shopify/products/deleteProduct";
 import { shopifyUpdateProductRouter } from "./routes/shopify/products/updateProduct";
+import { lazadaInstallRouter } from "./routes/lazada/install";
+import { lazadaAddProductRouter } from "./routes/lazada/products/addProduct";
+import { importCSVRouter } from "./routes/csv";
 
 const app = express();
 
@@ -63,7 +66,12 @@ app.use(ebayAddOfferRouter);
 app.use(ebayListOffersRouter);
 
 // Lazada
-app.use(callbackLazadaRouter);
+app.use(lazadaInstallRouter);
+app.use(lazadaCallbackRouter);
+app.use(lazadaAddProductRouter);
+
+// CSV
+app.use(importCSVRouter);
 
 app.all("*", async (_req, _res) => {
   throw new NotFoundError();

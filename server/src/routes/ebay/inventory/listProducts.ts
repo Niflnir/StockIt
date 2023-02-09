@@ -5,25 +5,29 @@ import axios from "axios";
 
 const router = express.Router();
 
-router.get("/api/ebay/product", requireAuth, async (req: Request, res: Response) => {
-  const token = await AccessToken.findOne({
-    userId: req.currentUser!.id,
-    shop: "ebay",
-  });
+router.get(
+  "/api/ebay/products",
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const token = await AccessToken.findOne({
+      userId: req.currentUser!.id,
+      shop: "ebay",
+    });
 
-  if (!token) {
-    return new BadRequestError("Please connect to store");
+    if (!token) {
+      return new BadRequestError("Please connect to store");
+    }
+
+    const headers = {
+      Authorization: "Bearer " + token.token,
+    };
+    const response = await axios.get(
+      `https://api.sandbox.ebay.com/sell/inventory/v1/inventory_item`,
+      { headers }
+    );
+
+    res.status(202).send({ products: response.data });
   }
-
-  const headers = {
-    Authorization: "Bearer " + token.token,
-  };
-  const response = await axios.get(
-    `https://api.sandbox.ebay.com/sell/inventory/v1/inventory_item`,
-    { headers }
-  );
-
-  res.status(202).send({ products: response.data });
-});
+);
 
 export { router as ebayListProductsRouter };

@@ -7,7 +7,7 @@ import axios from "axios";
 const router = express.Router();
 
 router.post(
-  "/api/ebay/product",
+  "/api/ebay/products",
   requireAuth,
   async (req: Request, res: Response) => {
     const { title, description, quantity } = req.body;

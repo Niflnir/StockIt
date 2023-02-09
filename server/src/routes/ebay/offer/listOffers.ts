@@ -6,7 +6,7 @@ import axios from "axios";
 const router = express.Router();
 
 router.get(
-  "/api/ebay/offer",
+  "/api/ebay/offers",
   requireAuth,
   async (req: Request, res: Response) => {
     const token = await AccessToken.findOne({
