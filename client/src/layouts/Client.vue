@@ -11,7 +11,7 @@
               <img src="../assets/images/avatars/avtar_1.png" class="profilepic" alt="Avatar">
             </button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item" href="#">Logout</a></li>
+              <li><a class="dropdown-item" href="/signin">Logout</a></li>
             </ul>
           </div>
         </div>

@@ -77,7 +77,7 @@ const defaultchildRoutes = (prop, mode = false) => [
     path: 'import',
     name: prop + '.importexport',
     meta: { auth: true, name: 'importexport' },
-    component: () => import('../views/main/TestHome')
+    component: () => import('../views/main/ImportExport')
   },
   {
     path: 'products',

@@ -162,6 +162,7 @@ function filteredList () {
         margin-top: 2%;
         border-radius: 5px;
         background-color: #ffffff;
+        box-shadow: 0 10px 30px 0 rgb(17 38 146 / 5%);
         img {
           width: 5vw;
         }
@@ -196,6 +197,7 @@ function filteredList () {
       width: 20vw;
       background-color: #ffffff;
       border-radius: 5px;
+      box-shadow: 0 10px 30px 0 rgb(17 38 146 / 5%);
       .image {
         display: flex;
         justify-content: center;
