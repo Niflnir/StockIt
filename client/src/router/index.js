@@ -98,6 +98,12 @@ const defaultchildRoutes = (prop, mode = false) => [
     component: () => import('../views/main/Support')
   },
   {
+    path: 'activity',
+    name: prop + '.activity',
+    meta: { auth: true, name: 'activity' },
+    component: () => import('../views/main/Activity')
+  },
+  {
     path: 'settings',
     name: prop + '.settings',
     meta: { auth: true, name: 'settings' },

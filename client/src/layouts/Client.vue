@@ -3,10 +3,17 @@
     <Navbar />
     <div class="mainarea">
       <div class="topbar">
-        <div class="title">Overview</div>
+        <div class="title">{{ currentPathName }}</div>
         <div class="profile">
           <div class="profilename">Bobbilicious The Third</div>
-          <img src="../assets/images/avatars/avtar_1.png" class="profilepic" alt="Avatar">
+          <div class="dropdown">
+            <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="../assets/images/avatars/avtar_1.png" class="profilepic" alt="Avatar">
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+          </div>
         </div>
       </div>
       <router-view />
@@ -15,7 +22,6 @@
 </template>
 <script setup>
 import Navbar from '../views/main/Navbar.vue'
-
 </script>
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=Mulish&display=swap');
@@ -57,6 +63,12 @@ import Navbar from '../views/main/Navbar.vue'
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+    .dropdown {
+      .dropdown-toggle {
+        border: 0px;
+        background-color: #F5F6FA;
+      }
     }
     img {
       border-radius: 50%;

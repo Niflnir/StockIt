@@ -46,6 +46,14 @@
             <span class="text">Support</span>
           </div>
         </router-link>
+        <router-link class="button" to="/default/activity">
+          <div class="container">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-clock-rotate-left" />
+            </div>
+            <span class="text">Activity Log</span>
+          </div>
+        </router-link>
         <hr class="divider">
         <router-link class="button" to="/default/settings">
           <div class="container">
@@ -114,7 +122,9 @@ aside {
       display: flex;
       flex-direction: row;
       .icon {
+        display: flex;
         width: 1.1rem;
+        align-items: center;
       }
       span {
         padding-left: 20px;
