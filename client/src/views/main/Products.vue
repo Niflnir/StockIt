@@ -37,7 +37,10 @@
         <div class="image">
           <img src="../../assets/images/icons/stockit_logo.png" alr="Vue">
         </div>
-        <div v-if="selected">
+        <div v-if="Object.keys(selected).length == 0">
+          <div class="emptytext">Select an item to start</div>
+        </div>
+        <div v-if="Object.keys(selected).length != 0">
           <div class="item">Title: {{ selected.name }}</div>
           <div class="sku">SKU: {{ selected.sku }}</div>
           <div class="qty">Quantity: {{ selected.quantity }}</div>
@@ -226,6 +229,10 @@ function filteredList () {
       }
       .platform {
         padding: 20px;
+      }
+      .emptytext {
+        font-weight: bold;
+        color: #747474;
       }
     }
   }
