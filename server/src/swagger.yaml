@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: StockIt Express API with Swagger
+  description: CRUD API application made with Express and documented with Swagger
+  version: 0.1.9
+servers:
+  - url: http://stockit.live
+    description: Production server
+components:
+  schemas:
+    ShopifyProduct:
+      type: object
+      required:
+        - title
+        - description
+        - price
+        - quantity
+        - status
+      properties:
+        title:
+          type: string
+          description: The title of the product
+        description:
+          type: string
+          description: The description of the product
+        price:
+          type: string
+          description: The price of the product
+        quantity:
+          type: number
+          description: The quantity of the product
+        status:
+          type: string
+          description: active or draft
+      example:
+        title: Blue Jeans
+        description: Blue jeans made from the best quality fabric!
+        price: 15
+        quantity: 5
+        status: draft
+paths:
+  /api/shopify/products/{store}:
+    get:
+      summary: Retrieve all products from Shopify store
+      parameters:
+        - in: path
+          name: store
+          required: true
+          schema:
+            type: string
+          description: The name of the Shopify store
+      tags:
+        - ShopifyProducts
+      responses:
+        201:
+          description: Product successfully retrieved from Shopify store
+        400:
+          description: Bad request error
+    post:
+      summary: Create a product in Shopify store
+      parameters:
+        - in: path
+          name: store
+          required: true
+          schema:
+            type: string
+          description: The name of the Shopify store
+      tags:
+        - ShopifyProducts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShopifyProduct"
+      responses:
+        201:
+          description: Product successfully created in Shopify store
+        400:
+          description: Failed to create Product in Shopify store
+    delete:
+      summary: Delete a product from Shopify store
+      parameters:
+        - in: path
+          name: store
+          required: true
+          schema:
+            type: string
+          description: The name of the Shopify store
+      tags:
+        - ShopifyProducts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - productId
+              properties:
+                productId:
+                  type: string
+      responses:
+        201:
+          description: Product successfully created in Shopify store
+        400:
+          description: Failed to create Product in Shopify store

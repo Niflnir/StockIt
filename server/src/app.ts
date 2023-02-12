@@ -3,6 +3,8 @@ import "express-async-errors"; // handles async error, dont delete
 import cookieParser from "cookie-parser";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
 import { currentUser, errorHandler, NotFoundError } from "./utils/utils";
 import { loginRouter } from "./routes/auth/login";
 import { logoutRouter } from "./routes/auth/logout";
@@ -25,8 +27,8 @@ import { shopifyAddProductRouter } from "./routes/shopify/products/addProduct";
 import { shopifyDeleteProductRouter } from "./routes/shopify/products/deleteProduct";
 import { shopifyUpdateProductRouter } from "./routes/shopify/products/updateProduct";
 import { lazadaInstallRouter } from "./routes/lazada/install";
-import { lazadaAddProductRouter } from "./routes/lazada/products/addProduct";
 import { importCSVRouter } from "./routes/csv";
+import { lazadaGetProductsRouter } from "./routes/lazada/products/getProducts";
 
 const app = express();
 
@@ -68,10 +70,21 @@ app.use(ebayListOffersRouter);
 // Lazada
 app.use(lazadaInstallRouter);
 app.use(lazadaCallbackRouter);
-app.use(lazadaAddProductRouter);
+app.use(lazadaGetProductsRouter);
 
 // CSV
 app.use(importCSVRouter);
+
+// Swagger
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(YAML.load("src/swagger.yaml"), {
+    explorer: true,
+    customCssUrl:
+      "https://cdn.jsdelivr.net/npm/swagger-ui-themes@3.0.0/themes/3.x/theme-feeling-blue.css",
+  })
+);
 
 app.all("*", async (_req, _res) => {
   throw new NotFoundError();

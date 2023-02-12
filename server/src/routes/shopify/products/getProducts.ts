@@ -6,10 +6,10 @@ import { AccessToken } from "../../../models/access-token";
 const router = express.Router();
 
 router.get(
-  "/api/shopify/products/:shop",
+  "/api/shopify/products/:store",
   requireAuth,
   async (req: Request, res: Response) => {
-    const shop = req.params.shop;
+    const store = req.params.store;
     const existingAccessToken = await AccessToken.findOne({
       userId: req.currentUser!.id,
       shop: "shopify",
@@ -19,7 +19,7 @@ router.get(
       return new BadRequestError("Please reconnect to your Shopify store");
     }
 
-    const apiRequestURL = `https://${shop}.myshopify.com/admin/api/2023-01/products.json`;
+    const apiRequestURL = `https://${store}.myshopify.com/admin/api/2023-01/products.json`;
     const apiRequestHeaders = {
       "X-Shopify-Access-Token": existingAccessToken.token,
     };

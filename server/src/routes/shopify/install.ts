@@ -1,22 +1,22 @@
 import express, { Request, Response } from "express";
 import crypto from "crypto";
-import { BadRequestError } from "../../utils/utils";
+import { BadRequestError, requireAuth } from "../../utils/utils";
 
 const router = express.Router();
 
-router.get("/api/shopify", async (req: Request, res: Response) => {
-  const shopName = req.query.shop;
+router.get("/api/shopify", requireAuth, async (req: Request, res: Response) => {
+  const store = req.query.store;
   const forwardingAddress = process.env.DOMAIN;
   const apiKey = process.env.SHOPIFY_API_KEY;
   const scopes = "write_products";
 
-  if (shopName) {
+  if (store) {
     const shopState = crypto.randomBytes(16).toString("hex");
     const redirectURL = forwardingAddress + "/api/shopify/callback";
     const installUrl =
       "https://" +
-      shopName +
-      "/admin/oauth/authorize?client_id=" +
+      store +
+      ".myshopify.com/admin/oauth/authorize?client_id=" +
       apiKey +
       "&scope=" +
       scopes +
