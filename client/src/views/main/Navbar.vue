@@ -19,7 +19,7 @@
             <div class="icon">
               <font-awesome-icon icon="fa-fw fa-solid fa-ticket" />
             </div>
-            <span class="text">Import / Export</span>
+            <span class="text">Connections</span>
           </div>
         </router-link>
         <router-link class="button" to="/default/products">
@@ -28,14 +28,6 @@
               <font-awesome-icon icon="fa-fw fa-solid fa-tag" />
             </div>
             <span class="text">Products</span>
-          </div>
-        </router-link>
-        <router-link class="button" to="/default/platforms">
-          <div class="container">
-            <div class="icon">
-              <font-awesome-icon icon="fa-fw fa-solid fa-user-group" />
-            </div>
-            <span class="text">Platforms</span>
           </div>
         </router-link>
         <router-link class="button" to="/default/support">

@@ -14,6 +14,8 @@
         </ul>
       </div>
     </div>
+    <button class="btn btn-outline-primary btnExtra" type="button" id="optionBtn1">Add New Products</button>
+    <button class="btn btn-outline-success btnExtra" type="button" id="optionBtn2">Export to CSV</button>
     <div class="text">
       Total Items: {{ filteredList().length }}
     </div>
@@ -121,6 +123,10 @@ function filteredList () {
   .text {
     padding-top: 1.5rem;
   }
+  .btnExtra {
+    margin-top: 1rem;
+    margin-right: 1rem;
+  }
   .prodcontainer {
     display: flex;
     flex-direction: row;
@@ -129,18 +135,19 @@ function filteredList () {
       display: flex;
       flex-direction: column;
       float: left;
-      width: 55vw;
+      width: 45vw;
       .colname {
         display: flex;
         flex-direction: row;
         background-color: #ffffff;
-        width: 55vw;
+        width: 45vw;
         border-radius: 3%;
         color: #282828;
         font-weight: 500;
         margin-top: 10px;
+        box-shadow: 0 10px 30px 0 rgb(17 38 146 / 5%);
         .colitem {
-          width: 35vw;
+          width: 25vw;
           padding: 15px;
           padding-right: 0px;
         }

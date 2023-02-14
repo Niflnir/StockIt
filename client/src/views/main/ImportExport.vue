@@ -1,6 +1,6 @@
 <template lang="">
   <div>
-    Import / Export
+    Connections
   </div>
 </template>
 <script setup>
