@@ -31,6 +31,7 @@ import { lazadaInstallRouter } from "./routes/lazada/install";
 import { importCSVRouter } from "./routes/csv";
 import { lazadaGetProductsRouter } from "./routes/lazada/products/getProducts";
 import { shopifyConnectRouter } from "./routes/shopify/connect";
+import { activityLogsRouter } from "./routes/getActivityLogs";
 
 const app = express();
 
@@ -78,6 +79,9 @@ app.use(lazadaGetProductsRouter);
 
 // CSV
 app.use(importCSVRouter);
+
+// Activity Logs
+app.use(activityLogsRouter);
 
 // Swagger
 app.use(

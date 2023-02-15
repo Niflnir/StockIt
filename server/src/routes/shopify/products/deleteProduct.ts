@@ -37,7 +37,7 @@ router.delete(
       if (isAxiosError(err)) {
         console.log(err.response?.data);
       }
-      return new BadRequestError("Error deleting product from Shopify store");
+      throw new BadRequestError("Error deleting product from Shopify store");
     }
   }
 );

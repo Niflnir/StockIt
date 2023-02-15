@@ -18,7 +18,7 @@ router.put(
     });
 
     if (!existingAccessToken) {
-      return new BadRequestError("Please reconnect to your Shopify store");
+      throw new BadRequestError("Please reconnect to your Shopify store");
     }
 
     const apiRequestURL = `https://${existingAccessToken.store}/admin/api/2023-01/products/${productId}.json`;
@@ -54,7 +54,7 @@ router.put(
       if (isAxiosError(err)) {
         console.log(err.response?.data);
       }
-      return new BadRequestError("Error updating product in Shopify store");
+      throw new BadRequestError("Error updating product in Shopify store");
     }
   }
 );

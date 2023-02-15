@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 interface ActivityLogAttrs {
   userId: string;
   description: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 // An interface that describes the properties
@@ -19,7 +19,7 @@ interface ActivityLogModel extends mongoose.Model<ActivityLogDoc> {
 interface ActivityLogDoc extends mongoose.Document {
   userId: string;
   description: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 const activityLogSchema = new mongoose.Schema(
@@ -33,8 +33,8 @@ const activityLogSchema = new mongoose.Schema(
       required: true,
     },
     createdAt: {
-      type: Date,
-      default: Date.now,
+      type: String,
+      required: true,
     },
   },
   {
@@ -52,6 +52,9 @@ activityLogSchema.statics.build = (attrs: ActivityLogAttrs) => {
   return new ActivityLog(attrs);
 };
 
-const ActivityLog = mongoose.model<ActivityLogDoc, ActivityLogModel>("ActivityLog", activityLogSchema);
+const ActivityLog = mongoose.model<ActivityLogDoc, ActivityLogModel>(
+  "ActivityLog",
+  activityLogSchema
+);
 
 export { ActivityLog };
