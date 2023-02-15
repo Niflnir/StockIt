@@ -11,7 +11,7 @@ router.get(
   async (req: Request, res: Response) => {
     const token = await AccessToken.findOne({
       userId: req.currentUser!.id,
-      shop: "ebay",
+      platform: "ebay",
     });
 
     if (!token) {

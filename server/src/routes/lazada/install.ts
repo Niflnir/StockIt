@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { BadRequestError, requireAuth } from "../../utils/utils";
+import { requireAuth } from "../../utils/utils";
 
 const router = express.Router();
 
@@ -11,8 +11,7 @@ router.get("/api/lazada", requireAuth, async (req: Request, res: Response) => {
     redirect_uri +
     "&client_id=" +
     appkey;
-  console.log("URL: ", url);
-  res.send({ url: url });
+  res.redirect(url);
 });
 
 export { router as lazadaInstallRouter };

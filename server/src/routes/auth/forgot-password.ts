@@ -16,7 +16,7 @@ router.post("/api/auth/forgot", async (req: Request, res: Response) => {
     return new NotAuthorizedError();
   }
 
-  const existingToken = Token.findOne({ userId: existingUser._id })
+  const existingToken = Token.findOne({ userId: existingUser._id });
   if (existingToken) await existingToken.deleteOne();
 
   // Otherwise, generate a password reset token
@@ -55,10 +55,10 @@ router.post("/api/auth/forgot", async (req: Request, res: Response) => {
     if (error) {
       console.log(error);
     } else {
-      console.log("Email sent: " + info.response);
+      console.log("Reset password link sent: " + info.response);
     }
   });
-  res.status(201).send("Email sent");
+  res.status(200).send("Reset password link sent");
 });
 
 export { router as forgotPasswordRouter };

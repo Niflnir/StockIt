@@ -5,7 +5,8 @@ import mongoose from "mongoose";
 interface AccessTokenAttrs {
   userId: string;
   token: string;
-  shop: string;
+  platform: string;
+  store: string;
   createdAt: Date;
 }
 
@@ -20,7 +21,8 @@ interface AccessTokenModel extends mongoose.Model<AccessTokenDoc> {
 interface AccessTokenDoc extends mongoose.Document {
   userId: string;
   token: string;
-  shop: string;
+  platform: string;
+  store: string;
   createdAt: Date;
 }
 
@@ -34,7 +36,11 @@ const accessTokenSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    shop: {
+    platform: {
+      type: String,
+      required: true,
+    },
+    store: {
       type: String,
       required: true,
     },
@@ -59,6 +65,9 @@ accessTokenSchema.statics.build = (attrs: AccessTokenAttrs) => {
   return new AccessToken(attrs);
 };
 
-const AccessToken = mongoose.model<AccessTokenDoc, AccessTokenModel>("AccessToken", accessTokenSchema);
+const AccessToken = mongoose.model<AccessTokenDoc, AccessTokenModel>(
+  "AccessToken",
+  accessTokenSchema
+);
 
 export { AccessToken };

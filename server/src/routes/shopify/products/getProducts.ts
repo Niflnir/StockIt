@@ -1,37 +1,73 @@
 import express, { Request, Response } from "express";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { BadRequestError, requireAuth } from "../../../utils/utils";
 import { AccessToken } from "../../../models/access-token";
+import { saveActivity } from "../../../services/save-activity";
 
 const router = express.Router();
+interface ShopifyProduct {
+  product_id: string;
+  title: string;
+  description: string;
+  price: string;
+  quantity: number;
+  status: string;
+  platform: string;
+}
 
 router.get(
-  "/api/shopify/products/:store",
+  "/api/shopify/products",
   requireAuth,
   async (req: Request, res: Response) => {
-    const store = req.params.store;
     const existingAccessToken = await AccessToken.findOne({
       userId: req.currentUser!.id,
-      shop: "shopify",
+      platform: "shopify",
     });
 
     if (!existingAccessToken) {
       return new BadRequestError("Please reconnect to your Shopify store");
     }
 
-    const apiRequestURL = `https://${store}.myshopify.com/admin/api/2023-01/products.json`;
+    const apiRequestURL = `https://${existingAccessToken.store}/admin/api/2023-01/products.json`;
     const apiRequestHeaders = {
       "X-Shopify-Access-Token": existingAccessToken.token,
     };
 
-    const response = await axios.get(apiRequestURL, {
-      headers: apiRequestHeaders,
-    });
+    try {
+      const response = await axios.get(apiRequestURL, {
+        headers: apiRequestHeaders,
+      });
+      const products = response.data.products;
+      const productList: ShopifyProduct[] = [];
 
-    if (response) {
-      res.status(200).send(response.data);
-    } else {
-      return new BadRequestError("Failed to fetch data");
+      products.forEach((product: any) => {
+        productList.push({
+          product_id: product.variants[0].product_id,
+          title: product.title,
+          description: product.body_html,
+          price: product.variants[0].price,
+          quantity: product.variants[0].inventory_quantity,
+          status: product.status,
+          platform: "shopify",
+        });
+      });
+
+      saveActivity(
+        req.currentUser!.id,
+        "Successfully retrieved products from Shopify store"
+      );
+      res.status(200).send({ productList: productList });
+    } catch (err) {
+      if (isAxiosError(err)) {
+        console.log(err.response?.data);
+      }
+      saveActivity(
+        req.currentUser!.id,
+        "Failed to retrieve products from Shopify store"
+      );
+      return new BadRequestError(
+        "Error retrieving products from Shopify store"
+      );
     }
   }
 );

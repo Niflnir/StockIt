@@ -2,25 +2,25 @@ import express, { Request, Response } from "express";
 import axios, { isAxiosError } from "axios";
 import { BadRequestError, requireAuth } from "../../../utils/utils";
 import { AccessToken } from "../../../models/access-token";
+import { saveActivity } from "../../../services/save-activity";
 
 const router = express.Router();
 
 router.delete(
-  "/api/shopify/products/:shop",
+  "/api/shopify/products",
   requireAuth,
   async (req: Request, res: Response) => {
     const { productId } = req.body;
-    const shop = req.params.shop;
     const existingAccessToken = await AccessToken.findOne({
       userId: req.currentUser!.id,
-      shop: "shopify",
+      platform: "shopify",
     });
 
     if (!existingAccessToken) {
       return new BadRequestError("Please reconnect to your Shopify store");
     }
 
-    const apiRequestURL = `https://${shop}.myshopify.com/admin/api/2023-01/products/${productId}.json`;
+    const apiRequestURL = `https://${existingAccessToken.store}/admin/api/2023-01/products/${productId}.json`;
     const apiRequestHeaders = {
       "X-Shopify-Access-Token": existingAccessToken.token,
     };
@@ -28,15 +28,17 @@ router.delete(
       await axios.delete(apiRequestURL, {
         headers: apiRequestHeaders,
       });
+      saveActivity(
+        req.currentUser!.id,
+        "Successfully deleted product from Shopify store"
+      );
+      res.status(202).send("Successfully deleted product from Shopify store");
     } catch (err) {
       if (isAxiosError(err)) {
         console.log(err.response?.data);
       }
       return new BadRequestError("Error deleting product from Shopify store");
     }
-    return res
-      .status(202)
-      .send("Successfully deleted product from Shopify store");
   }
 );
 

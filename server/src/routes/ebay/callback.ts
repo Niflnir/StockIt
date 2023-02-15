@@ -37,14 +37,15 @@ router.get("/api/ebay/callback", async (req: Request, res: Response) => {
   const accessToken = response.data.access_token;
   const existingAccessToken = await AccessToken.findOne({
     userId: req.currentUser!.id,
-    shop: "ebay",
+    platform: "ebay",
   });
 
   if (!existingAccessToken) {
     const newAccessToken = AccessToken.build({
       userId: req.currentUser!.id,
       token: accessToken,
-      shop: "ebay",
+      platform: "ebay",
+      store: "",
       createdAt: new Date(Date.now()),
     });
     await newAccessToken.save();

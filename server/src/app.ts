@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 import YAML from "yamljs";
 import { currentUser, errorHandler, NotFoundError } from "./utils/utils";
 import { loginRouter } from "./routes/auth/login";
@@ -29,10 +30,12 @@ import { shopifyUpdateProductRouter } from "./routes/shopify/products/updateProd
 import { lazadaInstallRouter } from "./routes/lazada/install";
 import { importCSVRouter } from "./routes/csv";
 import { lazadaGetProductsRouter } from "./routes/lazada/products/getProducts";
+import { shopifyConnectRouter } from "./routes/shopify/connect";
 
 const app = express();
 
 app.set("trust proxy", true);
+app.use(cors({ methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"] }));
 app.use(cookieParser());
 app.use(json());
 app.use(
@@ -52,6 +55,7 @@ app.use(logoutRouter);
 
 // Shopify
 app.use(shopifyInstallRouter);
+app.use(shopifyConnectRouter);
 app.use(shopifyCallbackRouter);
 app.use(shopifyGetProductsRouter);
 app.use(shopifyAddProductRouter);

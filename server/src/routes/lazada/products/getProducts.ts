@@ -10,10 +10,9 @@ router.get(
   "/api/lazada/products/:filter",
   requireAuth,
   async (req: Request, res: Response) => {
-    const filter = req.params.filter;
     const existingAccessToken = await AccessToken.findOne({
       userId: req.currentUser!.id,
-      shop: "lazada",
+      platform: "lazada",
     });
 
     if (!existingAccessToken) {
@@ -25,6 +24,11 @@ router.get(
       process.env.LAZADA_APP_SECRET,
       "SINGAPORE"
     );
+
+    const filter = req.params.filter;
+    if (filter !== "live" && filter !== "inactive") {
+      return new BadRequestError("Invalid status filter");
+    }
 
     lazadaAPI.accessToken = existingAccessToken.token;
     const response = await lazadaAPI.getProducts({

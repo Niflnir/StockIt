@@ -54,14 +54,15 @@ router.get("/api/shopify/callback", async (req: Request, res: Response) => {
 
     const existingAccessToken = await AccessToken.findOne({
       userId: req.currentUser!.id,
-      shop: "shopify",
+      platform: "shopify",
     });
 
     if (!existingAccessToken) {
       const newAccessToken = AccessToken.build({
         userId: req.currentUser!.id,
         token: accessToken,
-        shop: "shopify",
+        store: shop.toString(),
+        platform: "shopify",
         createdAt: new Date(Date.now()),
       });
       await newAccessToken.save();

@@ -12,7 +12,7 @@ router.post(
     const { sku } = req.body;
     const token = await AccessToken.findOne({
       userId: req.currentUser!.id,
-      shop: "ebay",
+      platform: "ebay",
     });
 
     if (!token) {

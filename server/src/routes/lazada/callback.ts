@@ -22,14 +22,15 @@ router.get(
 
     const existingAccessToken = await AccessToken.findOne({
       userId: req.currentUser!.id,
-      shop: "lazada",
+      platform: "lazada",
     });
 
     if (!existingAccessToken) {
       const newAccessToken = AccessToken.build({
         userId: req.currentUser!.id,
         token: accessToken,
-        shop: "lazada",
+        store: "",
+        platform: "lazada",
         createdAt: new Date(Date.now()),
       });
       await newAccessToken.save();
