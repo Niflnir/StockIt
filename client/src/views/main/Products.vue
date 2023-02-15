@@ -14,7 +14,7 @@
         </ul>
       </div>
     </div>
-    <button class="btn btn-outline-primary btnExtra" type="button" id="optionBtn1">Add New Products</button>
+    <button class="btn btn-outline-primary btnExtra" type="button" id="optionBtn1" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Products</button>
     <button class="btn btn-outline-success btnExtra" type="button" id="optionBtn2">Export to CSV</button>
     <div class="text">
       Total Items: {{ filteredList().length }}
@@ -48,6 +48,25 @@
           <div class="qty">Quantity: {{ selected.quantity }}</div>
           <div class="price">Price: {{ selected.price }}</div>
           <div class="platform">Platforms</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Products</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <button type="button" class="btn btnspec btn-outline-primary">
+              <h6>One Product</h6>
+            </button>
+            <hr>
+            <button type="button" class="btn btnspec btn-outline-primary">
+              <h6>More than One Products</h6>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -126,6 +145,7 @@ function filteredList () {
   .btnExtra {
     margin-top: 1rem;
     margin-right: 1rem;
+    font-size: small;
   }
   .prodcontainer {
     display: flex;
@@ -135,19 +155,19 @@ function filteredList () {
       display: flex;
       flex-direction: column;
       float: left;
-      width: 45vw;
+      width: 55vw;
       .colname {
         display: flex;
         flex-direction: row;
         background-color: #ffffff;
-        width: 45vw;
+        width: 55vw;
         border-radius: 3%;
         color: #282828;
         font-weight: 500;
         margin-top: 10px;
         box-shadow: 0 10px 30px 0 rgb(17 38 146 / 5%);
         .colitem {
-          width: 25vw;
+          width: 35vw;
           padding: 15px;
           padding-right: 0px;
         }
@@ -255,5 +275,14 @@ input {
   border-radius: 5px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+.btnspec {
+  width: 100%;
+  height: 40px;
+  border-color: #a39cc3;
+  &:hover {
+    background-color: #a39cc3;
+    border-color: #a39cc3;
+  }
 }
 </style>

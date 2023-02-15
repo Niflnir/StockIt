@@ -70,11 +70,12 @@ export default {
 aside {
   display: flex;
   flex-direction: column;
-  width: 270px;
+  width: 14vw;
+  min-width: 260px;
   min-height: 100vh;
   overflow: hidden;
   position: fixed;
-  z-index: 10000;
+  z-index: 10;
 
   background-color: #F5F6FA;
   color: var(--light);

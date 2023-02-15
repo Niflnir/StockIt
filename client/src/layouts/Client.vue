@@ -33,7 +33,8 @@ import Navbar from '../views/main/Navbar.vue'
   }
 }
 .mainarea {
-  margin-left: 290px;
+  position: absolute;
+  right: 1vw;
   width: calc(100vw - 330px);
 }
 .topbar {
