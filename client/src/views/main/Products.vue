@@ -63,9 +63,11 @@
               <h6>One Product</h6>
             </button>
             <hr>
-            <button type="button" class="btn btnspec btn-outline-primary">
+            <usecsv-button importerKey="your-importer-key">
+              <button type="button" class="btn btnspec btn-outline-primary">
               <h6>More than One Products</h6>
             </button>
+            </usecsv-button>
           </div>
         </div>
       </div>

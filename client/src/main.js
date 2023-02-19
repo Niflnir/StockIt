@@ -8,7 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
+import UseCSVButton from '@usecsv/vuejs3'
 import globalComponent from './plugins/global-components'
+
 require('waypoints/lib/noframework.waypoints.min')
 
 library.add(fas, far, fab)
@@ -18,6 +20,7 @@ const app = createApp(App)
 app.use(store)
 app.use(router)
 app.use(globalComponent)
+app.use(UseCSVButton)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.mount('#app')
 export { app }

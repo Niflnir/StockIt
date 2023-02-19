@@ -1,6 +1,6 @@
 <template lang="">
   <div>
-    Support
+    Test
   </div>
 </template>
 <script setup>
