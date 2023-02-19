@@ -3,6 +3,7 @@ import crypto from "crypto";
 import queryString from "query-string";
 import axios from "axios";
 import { BadRequestError } from "../../utils/utils";
+import { AccessToken } from "../../models/access-token";
 
 const router = express.Router();
 
@@ -51,23 +52,26 @@ router.get("/api/shopify/callback", async (req: Request, res: Response) => {
     }
     const accessToken = accessTokenResponse.data.access_token;
 
-    // Example Shopiy Request
-    const apiRequestURL = `https://${shop}/admin/api/2023-01/products.json`;
-    const apiRequestHeaders = {
-      "X-Shopify-Access-Token": accessToken,
-    };
-    const result = await axios.get(apiRequestURL, {
-      headers: apiRequestHeaders,
+    const existingAccessToken = await AccessToken.findOne({
+      userId: req.currentUser!.id,
+      platform: "shopify",
     });
-    if (result) {
-      console.log("connected");
-      res.send(result.data);
-    } else {
-      return new BadRequestError("Failed to fetch data");
+
+    if (!existingAccessToken) {
+      const newAccessToken = AccessToken.build({
+        userId: req.currentUser!.id,
+        token: accessToken,
+        store: shop.toString(),
+        platform: "shopify",
+        createdAt: new Date(Date.now()),
+      });
+      await newAccessToken.save();
     }
+
+    res.status(200).send("Successfully connected to Shopify store");
   } else {
     return new BadRequestError("Required parameters missing");
   }
 });
 
-export { router as accessTokenShopifyRouter };
+export { router as shopifyCallbackRouter };

@@ -52,20 +52,6 @@
                         <h4 class="card-title">$855.8K</h4>
                         <p class="mb-0">Gross Sales</p>
                   </template>
-                  <template v-slot:headerContent>
-                     <div class="d-flex align-items-center align-self-center">
-                        <div class="d-flex align-items-center text-primary">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="12" viewBox="0 0 24 24" fill="currentColor">
-                              <g>
-                                 <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                              </g>
-                           </svg>
-                           <div class="ms-2">
-                              <span class="text-secondary">Sales</span>
-                           </div>
-                        </div>
-                     </div>
-                  </template>
                   <template v-slot:headerAction>
                      <div class="dropdown">
                         <a href="#" class="text-secondary dropdown-toggle" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -366,8 +352,25 @@ export default {
       dmain: {
         series: [{
           name: 'total',
-          data: [94, 80, 94, 80, 94, 80, 94]
-        }],
+          data: [94, 80, 94, 80, 94, 80, 94],
+          color: '#3a57e8'
+        },
+        {
+          name: 'Lazada',
+          data: [74, 40, 54, 20, 74, 20, 84],
+          color: '#079aa2'
+        },
+        {
+          name: 'Shopee',
+          data: [24, 40, 34, 60, 24, 60, 14],
+          color: '#f7b924'
+        },
+        {
+          name: 'Tiki',
+          data: [24, 40, 34, 50, 11, 5, 14],
+          color: '#78f724'
+        }
+        ],
         chart: {
           fontFamily: '"Inter", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
           height: 245,
@@ -400,7 +403,7 @@ export default {
           }
         },
         legend: {
-          show: false
+          show: true
         },
         xaxis: {
           labels: {
@@ -417,7 +420,7 @@ export default {
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug']
         },
         grid: {
-          show: false
+          show: true
         },
         fill: {
           type: 'gradient',
@@ -430,7 +433,7 @@ export default {
             opacityFrom: 0.4,
             opacityTo: 0.1,
             stops: [0, 50, 80],
-            colors: ['#3a57e8', '#4bc7d2']
+            colors: ['#3a57e8', '#4bc7d2', '#f7b924']
           }
         },
         tooltip: {

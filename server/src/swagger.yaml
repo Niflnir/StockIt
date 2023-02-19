@@ -1,0 +1,331 @@
+openapi: 3.0.0
+info:
+  title: StockIt Express API with Swagger
+  description: CRUD API application made with Express and documented with Swagger
+  version: 0.1.9
+servers:
+  - url: https://stockit.live
+components:
+  securitySchemes:
+    cookieAuth: # arbitrary name for the security scheme; will be used in the "security" key later
+      type: apiKey
+      in: cookie
+      name: session # cookie name
+  schemas:
+    User:
+      type: objext
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          description: user's email
+        password:
+          type: string
+          description: user's password
+      example:
+        email: abc123@gmail.com
+        password: abc123
+security:
+  - cookieAuth: []
+paths:
+  /api/auth/signup:
+    post:
+      summary: Create a new StockIt account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      tags:
+        - Authentication
+      responses:
+        201:
+          description: User account succesfully created
+        400:
+          description: Email is in use, try another email
+  /api/auth/login:
+    post:
+      summary: Log into StockIt account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      tags:
+        - Authentication
+      responses:
+        200:
+          description: Succesfully logged in
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+        400:
+          description: Invalid credentials
+  /api/auth/forgot:
+    post:
+      summary: Send reset password link to user's email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+      tags:
+        - Authentication
+      responses:
+        200:
+          description: Sent reset password link sent to user's email
+        401:
+          description: Email does not exist
+  /api/auth/reset:
+    post:
+      summary: Reset StockIt account password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      tags:
+        - Authentication
+      responses:
+        200:
+          description: StockIt account password succesfully reset
+        401:
+          description: Email does not exist
+  /api/auth/logout:
+    get:
+      summary: Logout of StockIt account
+      tags:
+        - Authentication
+      responses:
+        200:
+          description: Succesfully logged out
+  /api/shopify:
+    get:
+      summary: Connect StockIt to Shopify store
+      parameters:
+        - in: query
+          name: store
+          required: true
+          schema:
+            type: string
+          description: The name of the Shopify store
+      tags:
+        - Shopify
+      responses:
+        200:
+          description: Successfully connected to Shopify store
+        400:
+          description: Failed to connect to Shopify store, store name is missing
+        401:
+          description: User not authenticated
+  /api/shopify/products/{store}:
+    get:
+      summary: Retrieve all products from Shopify store
+      parameters:
+        - in: path
+          name: store
+          required: true
+          schema:
+            type: string
+          description: The name of the Shopify store
+      tags:
+        - Shopify
+      responses:
+        200:
+          description: Successfully retrieved products from Shopify store
+        400:
+          description: Failed to retrieve product from Shopify store
+        401:
+          description: User not authenticated
+    post:
+      summary: Create a product in Shopify store
+      parameters:
+        - in: path
+          name: store
+          required: true
+          schema:
+            type: string
+          description: The name of the Shopify store
+      tags:
+        - Shopify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - description
+                - price
+                - quantity
+                - status
+              properties:
+                title:
+                  type: string
+                  description: The title of the product
+                description:
+                  type: string
+                  description: The description of the product
+                price:
+                  type: string
+                  description: The price of the product
+                quantity:
+                  type: number
+                  description: The quantity of the product
+                status:
+                  type: string
+                  description: active or draft
+              example:
+                title: Blue Jeans
+                description: Blue jeans made from the best quality fabric!
+                price: 15
+                quantity: 5
+                status: draft
+      responses:
+        201:
+          description: Product successfully created in Shopify store
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productId:
+                    type: string
+                    description: Id of the Shopify product that was added
+        400:
+          description: Failed to create Product in Shopify store
+        401:
+          description: User not authenticated
+    delete:
+      summary: Delete a product from Shopify store
+      parameters:
+        - in: path
+          name: store
+          required: true
+          schema:
+            type: string
+          description: The name of the Shopify store
+      tags:
+        - Shopify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - productId
+              properties:
+                productId:
+                  type: string
+      responses:
+        202:
+          description: Product successfully deleted from Shopify store
+        400:
+          description: Disconnected from Shopify store
+        401:
+          description: User not authenticated
+    put:
+      summary: Update a product in Shopify store
+      parameters:
+        - in: path
+          name: store
+          required: true
+          schema:
+            type: string
+          description: The name of the Shopify store
+      tags:
+        - Shopify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - productId
+              properties:
+                productId:
+                  type: string
+                  description: Id of the Shopify product
+                title:
+                  type: string
+                  description: The title of the product
+                description:
+                  type: string
+                  description: The description of the product
+                price:
+                  type: string
+                  description: The price of the product
+                quantity:
+                  type: number
+                  description: The quantity of the product
+                status:
+                  type: string
+                  description: active or draft
+              example:
+                productId: dj1c124jdkwfjig
+                title: Blue Jeans
+                description: Blue jeans made from the best quality fabric!
+                price: 15
+                quantity: 5
+                status: active
+      responses:
+        200:
+          description: Product successfully updated in Shopify store
+        400:
+          description: Failed to update product in Shopify store
+        401:
+          description: User not authenticated
+  /api/lazada:
+    get:
+      summary: Connect StockIt to Lazada store
+      tags:
+        - Lazada
+      responses:
+        200:
+          description: Successfully connected to Lazada store
+        400:
+          description: Failed to connect to Lazada store
+        401:
+          description: User not authenticated
+  /api/lazada/products:
+    get:
+      summary: Retrieve products from Lazada store
+      parameters:
+        - in: path
+          name: filter
+          required: true
+          schema:
+            type: string
+          description: Filter products based on product status. Product status is either live or inactive.
+      tags:
+        - Lazada
+      responses:
+        200:
+          description: Successfully retrieved products from Lazada store
+        400:
+          description: Failed to connect to Lazada store | Invalid status filter
+        401:
+          description: User not authenticated
