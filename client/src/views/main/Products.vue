@@ -15,7 +15,7 @@
       </div>
     </div>
     <button class="btn btn-outline-primary btnExtra" type="button" id="optionBtn1" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Products</button>
-    <button class="btn btn-outline-success btnExtra" type="button" id="optionBtn2">Export to CSV</button>
+    <button class="btn btn-outline-success btnExtra" type="button" id="optionBtn2" data-bs-toggle="modal" data-bs-target="#exportModal">Export to CSV</button>
     <div class="text">
       Total Items: {{ filteredList().length }}
     </div>
@@ -59,15 +59,61 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <button type="button" class="btn btnspec btn-outline-primary">
-              <h6>One Product</h6>
+            <button type="button" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#singleProductModal" class="btn btnspec">
+              One Product
             </button>
             <hr>
-            <usecsv-button importerKey="your-importer-key">
-              <button type="button" class="btn btnspec btn-outline-primary">
-              <h6>More than One Products</h6>
-            </button>
+            <usecsv-button importerKey="your-importer-key" v-slot="slotProps">
+              <button type="button" data-bs-dismiss="modal" @click="slotProps.openModal()" class="btn btnspec">
+                More than One Products
+              </button>
             </usecsv-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="singleProductModal" tabindex="-1" aria-labelledby="singleProductLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="singleProductLabel">Key in Product Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="inputtitle">Item Name</div>
+            <input type="text"  />
+            <div class="inputtitle">Item ID</div>
+            <input type="text" />
+            <div class="inputtitle">Quantity</div>
+            <input type="text"  />
+            <div class="inputtitle">Price</div>
+            <div class="input-box">
+              <input type="text"  />
+              <span class="unit">$</span>
+            </div>
+            <div class="inputtitle">Select Platforms</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary">Add Product</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exportLabel">Download CSV</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="centerbtn">
+              <button type="button" class="btn btnDownload" data-bs-dismiss="modal">Download</button>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>
@@ -139,6 +185,18 @@ function filteredList () {
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
       }
+    }
+    input {
+      display: block;
+      width: 48vw;
+      padding: 10px 45px;
+      background: white url("../../assets/images/icons/search.png") no-repeat 15px center;
+      background-size: 15px 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     }
   }
   .text {
@@ -266,25 +324,63 @@ function filteredList () {
     }
   }
 }
-input {
-  display: block;
-  width: 48vw;
-  padding: 10px 45px;
-  background: white url("../../assets/images/icons/search.png") no-repeat 15px center;
-  background-size: 15px 15px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-}
 .btnspec {
   width: 100%;
   height: 40px;
-  border-color: #a39cc3;
+  border-color: #9fa3ca;
+  background-color: #a6a9c7;
+  color: #ffffff;
   &:hover {
-    background-color: #a39cc3;
-    border-color: #a39cc3;
+    background-color: #7c81ad;
+    border-color: #9fa3ca;
+    color: #ffffff;
+  }
+}
+.modal-body {
+  input {
+    display: block;
+    width: 25vw;
+    padding: 10px;
+    background-color: white ;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+      rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  }
+  .inputtitle {
+    padding: 5px;
+  }
+  .input-box {
+    position: relative;
+  }
+  input {
+    display: block;
+    border: 1px solid #d7d6d6;
+    background: #fff;
+    padding: 10px 10px 10px 20px;
+  }
+  .unit {
+    position: absolute;
+    display: block;
+    left: 5px;
+    top: 10px;
+    z-index: 5;
+  }
+  .centerbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .btnDownload {
+      width: 100%;
+      height: 40px;
+      border-color: #9cc3a6;
+      background-color: #9cc3a6;
+      color: #ffffff;
+      &:hover {
+        background-color: #5a9268;
+      }
+    }
   }
 }
 </style>
