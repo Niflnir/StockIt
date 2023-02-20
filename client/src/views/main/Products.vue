@@ -61,7 +61,7 @@
             Price:
             <input type="text" class="form-control" v-model="editBuffer.price">
             <br>
-            <buttons buttonClass="btn-light" v-on:click="onClickUpdateButton">Update</buttons>
+            <buttons buttonClass="btn-light" v-on:click="onClickEditButton">Edit</buttons>
           </div>
         </div>
       </div>
@@ -73,8 +73,8 @@
             <h5 class="modal-title" id="exampleModalLabel">Add Products</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <button type="button" class="btn btnspec btn-outline-primary">
+          <div class="modal-body" v-if="!isAddProductMode">
+            <button type="button" class="btn btnspec btn-outline-primary" v-on:click="onClickAddProduct">
               <h6>One Product</h6>
             </button>
             <hr>
@@ -83,6 +83,18 @@
               <h6>More than One Products</h6>
             </button>
             </usecsv-button>
+          </div>
+          <div class="modal-body" v-else>
+            Title:
+            <input type="text" class="form-control" v-model="editBuffer.name">
+            SKU:
+            <input type="text" class="form-control" v-model="editBuffer.sku">
+            Quantity:
+            <input type="text" class="form-control" v-model="editBuffer.quantity">
+            Price:
+            <input type="text" class="form-control" v-model="editBuffer.price">
+            <br>
+            <buttons buttonClass="btn-light" v-on:click="onClickCreateButton">Create</buttons>
           </div>
         </div>
       </div>
@@ -120,7 +132,8 @@ export default {
         { name: 'crisp mountain air', quantity: '1616', tags: 'fruit, edible', sku: 'SKU456239407', price: '$13.85' }
       ],
       isEditMode: false,
-      editBuffer: null
+      editBuffer: null,
+      isAddProductMode: false
     }
   },
   methods: {
@@ -174,6 +187,42 @@ export default {
       this.isEditMode = false
       this.editBuffer = null
       this.selected = this.items[index]
+    },
+    onClickAddProduct () {
+      this.isAddProductMode = true
+      this.editBuffer = {
+        name: '',
+        quantity: 0,
+        tags: '',
+        sku: '',
+        price: ''
+      }
+    },
+    onClickCreateButton () {
+      // validate the input
+      if (this.editBuffer.name === '') {
+        alert('Name cannot be empty')
+        return
+      }
+      if (this.editBuffer.sku === '') {
+        alert('sku cannot be empty')
+        return
+      }
+      if (this.editBuffer.quantity < 0) {
+        alert('Quantity cannot be negative')
+        return
+      }
+      if (this.editBuffer.price === '') {
+        alert('Price cannot be empty')
+        return
+      }
+      // add the item
+      this.items.push(this.editBuffer)
+      // update the ui
+      this.isAddProductMode = false
+      this.editBuffer = null
+      // alert the user
+      alert('Product added successfully')
     }
   }
 }
