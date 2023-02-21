@@ -11,7 +11,8 @@ router.put(
   "/api/shopify/products",
   requireAuth,
   async (req: Request, res: Response) => {
-    const { productId, title, description, price, quantity, status } = req.body;
+    const { productId, title, description, price, quantity, status, image } =
+      req.body;
     const existingAccessToken = await AccessToken.findOne({
       userId: req.currentUser!.id,
       shop: "shopify",
@@ -36,6 +37,11 @@ router.put(
             price: price,
             sku: uuid(),
             inventory_quantity: quantity,
+          },
+        ],
+        images: [
+          {
+            attachment: image,
           },
         ],
       },

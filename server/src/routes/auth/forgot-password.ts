@@ -13,7 +13,7 @@ router.post("/api/auth/forgot", async (req: Request, res: Response) => {
 
   if (!existingUser) {
     // If no user is found, redirect to an error page
-    return new NotAuthorizedError();
+    throw new NotAuthorizedError();
   }
 
   const existingToken = Token.findOne({ userId: existingUser._id });

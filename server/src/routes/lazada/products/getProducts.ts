@@ -16,7 +16,7 @@ router.get(
     });
 
     if (!existingAccessToken) {
-      return new BadRequestError("Please reconnect to your Lazada store");
+      throw new BadRequestError("Please reconnect to your Lazada store");
     }
 
     const lazadaAPI = new LazadaAPI(
@@ -27,7 +27,7 @@ router.get(
 
     const filter = req.params.filter;
     if (filter !== "live" && filter !== "inactive") {
-      return new BadRequestError("Invalid status filter");
+      throw new BadRequestError("Invalid status filter");
     }
 
     lazadaAPI.accessToken = existingAccessToken.token;

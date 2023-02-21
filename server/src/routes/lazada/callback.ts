@@ -29,7 +29,7 @@ router.get(
       const newAccessToken = AccessToken.build({
         userId: req.currentUser!.id,
         token: accessToken,
-        store: "",
+        store: "store",
         platform: "lazada",
         createdAt: new Date(Date.now()),
       });
