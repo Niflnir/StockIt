@@ -5,7 +5,7 @@
     <div class="white-box">
       <div class="platform-display">
         <div class="display-row">
-          <div class="card">
+          <div class="card" @click="apiget()">
             <img src="../../assets/images/platforms/shopify.webp" class="card-img-top" alt="...">
           </div>
           <div class="card">
@@ -35,7 +35,22 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 
+export default {
+  name: 'App',
+  setup () {
+  },
+  methods: {
+    apiget: async function (endpoint, parameters) {
+      const res = await axios.post('https://www.stockit.live/api/auth/login', {
+        email: 'vaun890@gmail.com',
+        password: 'indigo890'
+      })
+      console.log(res)
+    }
+  }
+}
 </script>
 <style lang="scss">
 .connect {

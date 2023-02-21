@@ -71,14 +71,14 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Add Products</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="setTimeout(function() {this.isAddProductMode = false}, 500)"></button>
           </div>
           <div class="modal-body" v-if="!isAddProductMode">
             <button type="button" class="btn btnspec btn-outline-primary" v-on:click="onClickAddProduct">
               <h6>One Product</h6>
             </button>
             <hr>
-            <usecsv-button importerKey="your-importer-key" v-slot="slotProps">
+            <usecsv-button importerKey="c2c7364c-2b09-4c09-b5dc-ac479cb95e22" v-slot="slotProps">
               <button type="button" data-bs-dismiss="modal" @click="slotProps.openModal()" class="btn btnspec">
                 More than One Products
               </button>
@@ -246,6 +246,7 @@ export default {
     },
     onClickCreateButton () {
       // validate the input
+      this.isAddProductMode = false
       if (this.editBuffer.name === '') {
         alert('Name cannot be empty')
         return
