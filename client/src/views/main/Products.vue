@@ -8,9 +8,9 @@
           {{ searchOption }}
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" href="#" @click="searchOptionSel('Any')">Any</a></li>
-          <li><a class="dropdown-item" href="#" @click="searchOptionSel('By Tags')">By Tags</a></li>
-          <li><a class="dropdown-item" href="#" @click="searchOptionSel('By Platforms')">By Platforms</a></li>
+          <li><a class="dropdown-item" href="#" @click="searchOption = 'Any'">Any</a></li>
+          <li><a class="dropdown-item" href="#" @click="searchOption = 'By Tags'">By Tags</a></li>
+          <li><a class="dropdown-item" href="#" @click="searchOption = 'By Platforms'">By Platforms</a></li>
         </ul>
       </div>
     </div>
@@ -60,8 +60,8 @@
             <input type="text" class="form-control" v-model="editBuffer.quantity">
             Price:
             <input type="text" class="form-control" v-model="editBuffer.price">
-            <br>
-            <buttons buttonClass="btn-light" v-on:click="onClickEditButton">Edit</buttons>
+            <buttons buttonClass="btn-danger" v-on:click="this.isEditMode = false">Cancel</buttons>
+            <buttons buttonClass="btn-success" v-on:click="onClickEditButton">Update</buttons>
           </div>
         </div>
       </div>
@@ -71,10 +71,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Add Products</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="setTimeout(function() {this.isAddProductMode = false}, 500)"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="this.isAddProductMode = false"></button>
           </div>
           <div class="modal-body" v-if="!isAddProductMode">
-            <button type="button" class="btn btnspec btn-outline-primary" v-on:click="onClickAddProduct">
+            <button type="button" class="btn btnspec" v-on:click="onClickAddProduct">
               <h6>One Product</h6>
             </button>
             <hr>
@@ -87,14 +87,29 @@
           <div class="modal-body" v-else>
             Title:
             <input type="text" class="form-control" v-model="editBuffer.name">
-            SKU:
+            Description:
             <input type="text" class="form-control" v-model="editBuffer.sku">
             Quantity:
             <input type="text" class="form-control" v-model="editBuffer.quantity">
-            Price:
+            Price ($):
             <input type="text" class="form-control" v-model="editBuffer.price">
+            Status:
+            <div class="dropdown">
+              <button class="btn dropdown-toggle dropdownbtn" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ statusoption }}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                <li><a class="dropdown-item" href="#" @click="statusoption = 'active'">Active</a></li>
+                <li><a class="dropdown-item" href="#" @click="statusoption = 'draft'">Draft</a></li>
+              </ul>
+            </div>
+            Upload Image:
+            <form action="/action_page.php">
+              <input type="file" id="myFile" name="filename" v-on:change="uploadImage($event)">
+            </form>
             <br>
-            <buttons buttonClass="btn-light" v-on:click="onClickCreateButton">Create</buttons>
+            <button type="button" class="btn btn-secondary" @click="isAddProductMode = false">Cancel</button>
+            <buttons buttonClass="btn-primary createbtn" v-on:click="onClickCreateButton">Create</buttons>
           </div>
         </div>
       </div>
@@ -136,7 +151,13 @@
           </div>
           <div class="modal-body">
             <div class="centerbtn">
-              <button type="button" class="btn btnDownload" data-bs-dismiss="modal">Download</button>
+              <button type="button" class="btn btnDownload" v-if="downloading == false" @click="startDownload()">Download</button>
+              <button type="button" class="btn btnDownload" data-bs-dismiss="modal" v-if="downloading == true" disabled>
+                <div class="spinner-border text-success" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <div>Downloading</div>
+              </button>
             </div>
           </div>
           <div class="modal-footer">
@@ -147,15 +168,16 @@
     </div>
   </div>
 </template>
-<script setup>
-</script>
 <script>
+import axios from 'axios'
 export default {
   data () {
     return {
       input: '',
       selected: null,
+      downloading: false,
       searchOption: 'Any',
+      statusoption: 'active',
       items: [
         { name: 'apple', quantity: '661', tags: 'fruit, edible', sku: 'SKU456239407', price: '$1.20' },
         { name: 'happy clouds floating', quantity: '181', tags: 'fruit, edible', sku: 'SKU370540450', price: '$3.50' },
@@ -178,11 +200,43 @@ export default {
         { name: 'crisp mountain air', quantity: '1616', tags: 'fruit, edible', sku: 'SKU456239407', price: '$13.85' }
       ],
       isEditMode: false,
+      productdetails: null,
       editBuffer: null,
+      imagefile: null,
       isAddProductMode: false
     }
   },
   methods: {
+    convertBase64 (file) {
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader()
+        fileReader.readAsDataURL(file)
+        fileReader.onload = () => {
+          resolve(fileReader.result)
+        }
+        fileReader.onerror = (error) => {
+          reject(error)
+        }
+      })
+    },
+    async uploadImage (event) {
+      const file = event.target.files[0]
+      const base64 = await this.convertBase64(file)
+      this.imagefile = base64.split(',')[1]
+      console.log(this.imagefile)
+    },
+    startDownload () {
+      this.downloading = true
+      setTimeout(() => {
+        this.downloading = false
+        document.querySelector('#exportModal').classList.remove('show')
+        document.querySelector('body').classList.remove('modal-open')
+        const mdbackdrop = document.querySelector('.modal-backdrop')
+        if (mdbackdrop) {
+          mdbackdrop.classList.remove('modal-backdrop', 'show')
+        }
+      }, 1000)
+    },
     flipselection (sel) {
       this.searchOption = sel
     },
@@ -244,15 +298,14 @@ export default {
         price: ''
       }
     },
-    onClickCreateButton () {
+    async onClickCreateButton () {
       // validate the input
-      this.isAddProductMode = false
       if (this.editBuffer.name === '') {
         alert('Name cannot be empty')
         return
       }
-      if (this.editBuffer.sku === '') {
-        alert('sku cannot be empty')
+      if (this.editBuffer.desc === '') {
+        alert('Description cannot be empty')
         return
       }
       if (this.editBuffer.quantity < 0) {
@@ -263,13 +316,36 @@ export default {
         alert('Price cannot be empty')
         return
       }
+      if (this.imagefile === null) {
+        alert('Image cannot be empty')
+        return
+      }
       // add the item
       this.items.push(this.editBuffer)
       // update the ui
       this.isAddProductMode = false
-      this.editBuffer = null
-      // alert the user
-      alert('Product added successfully')
+      if (await this.sendnewproduct()) alert('Product added successfully')
+      else alert('Product add failed. Please try again')
+    },
+    sendnewproduct: async function () {
+      try {
+        console.log(this.editBuffer, this.statusoption, this.imagefile)
+        const res = await axios.post('https://www.stockit.live/api/shopify/products', {
+          title: this.editBuffer.name,
+          description: this.editBuffer.desc,
+          price: this.editBuffer.price,
+          quantity: this.editBuffer.quantity,
+          status: this.statusoption,
+          image: this.imagefile
+        })
+        console.log(res.status)
+        if (res.status === 201) {
+          return true
+        }
+      } catch (err) {
+        console.log(err)
+        return false
+      }
     }
   }
 }
@@ -495,6 +571,16 @@ export default {
     top: 10px;
     z-index: 5;
   }
+  .dropdownbtn {
+    border: 1px solid #d7d6d6;
+    box-shadow: 0 10px 30px 0 rgb(17 38 146 / 5%);
+  }
+  .createbtn {
+    margin-left: 1rem;
+    border-color: #9fa3ca;
+    background-color: #7c81ad;
+    color: #ffffff;
+  }
   .centerbtn {
     display: flex;
     justify-content: center;
@@ -504,6 +590,9 @@ export default {
       height: 40px;
       border-color: #9cc3a6;
       background-color: #9cc3a6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #ffffff;
       &:hover {
         background-color: #5a9268;

@@ -1,4 +1,4 @@
-<template lang="">
+<template lang="html">
   <div class="connect">
     <div class="title">Connections</div>
     <div class="subheading">Not selling on a platform yet? Click <u href="#">here</u> to get started</div>
@@ -42,11 +42,9 @@ export default {
   setup () {
   },
   methods: {
-    apiget: async function (endpoint, parameters) {
-      const res = await axios.post('https://www.stockit.live/api/auth/login', {
-        email: 'vaun890@gmail.com',
-        password: 'indigo890'
-      })
+    apiget: async function () {
+      const res = await axios.get('https://www.stockit.live/api/shopify')
+      window.open(res.data, '_blank', 'noreferrer')
       console.log(res)
     }
   }

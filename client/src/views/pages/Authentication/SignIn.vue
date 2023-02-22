@@ -18,52 +18,35 @@
                            </router-link>
                            <h2 class="mb-2 text-center">Sign In</h2>
                            <p class="text-center">Login to stay connected.</p>
-                           <form>
-                              <div class="row">
-                                 <div class="col-lg-12">
-                                    <div class="form-group">
-                                       <label for="email" class="form-label">Email</label>
-                                       <input type="email" class="form-control" id="email" aria-describedby="email" placeholder=" ">
-                                    </div>
-                                 </div>
-                                 <div class="col-lg-12">
-                                    <div class="form-group">
-                                       <label for="password" class="form-label">Password</label>
-                                       <input type="password" class="form-control" id="password" aria-describedby="password" placeholder=" ">
-                                    </div>
-                                 </div>
-                                 <div class="col-lg-12 d-flex justify-content-between">
-                                    <div class="form-check mb-3">
-                                       <input type="checkbox" class="form-check-input" id="customCheck1">
-                                       <label class="form-check-label" for="customCheck1">Remember Me</label>
-                                    </div>
-                                     <router-link  :to="{name: 'auth.recoverPassword'}">Forgot Password?</router-link>
-                                 </div>
-                              </div>
-                              <div class="d-flex justify-content-center">
-                                 <button type="submit" class="btn btn-primary">Sign In</button>
-                              </div>
-                              <p class="text-center my-3">or sign in with other accounts?</p>
-                              <div class="d-flex justify-content-center">
-                                 <ul class="list-group list-group-horizontal list-group-flush">
-                                    <li class="list-group-item border-0 pb-0">
-                                       <a href="#"><img src="@/assets/images/brands/fb.svg" alt="fb"></a>
-                                    </li>
-                                    <li class="list-group-item border-0 pb-0">
-                                       <a href="#"><img src="@/assets/images/brands/gm.svg" alt="gm"></a>
-                                    </li>
-                                    <li class="list-group-item border-0 pb-0">
-                                       <a href="#"><img src="@/assets/images/brands/im.svg" alt="im"></a>
-                                    </li>
-                                    <li class="list-group-item border-0 pb-0">
-                                       <a href="#"><img src="@/assets/images/brands/li.svg" alt="li"></a>
-                                    </li>
-                                 </ul>
-                              </div>
-                              <p class="mt-3 text-center">
-                                 Don’t have an account? <router-link :to="{name: 'auth.signup'}">Click here to sign up.</router-link>
-                              </p>
-                           </form>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="form-group">
+                                      <label for="email" class="form-label">Email</label>
+                                      <input type="email" class="form-control" id="email" aria-describedby="email" placeholder=" ">
+                                  </div>
+                                </div>
+                                <div class="col-lg-12">
+                                  <div class="form-group">
+                                      <label for="password" class="form-label">Password</label>
+                                      <input type="password" class="form-control" id="password" aria-describedby="password" placeholder=" ">
+                                  </div>
+                                </div>
+                                <div class="col-lg-12 d-flex justify-content-between">
+                                    <router-link  :to="{name: 'auth.recoverPassword'}">Forgot Password?</router-link>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button class="btn btn-primary" @click="login()">Sign In</button>
+                            </div>
+                            <div class="alert alert-success alertspec" role="alert" v-if="success">
+                              <p>Login Successful</p>
+                            </div>
+                            <div class="alert alert-danger alertspec2" role="alert" v-if="failed">
+                              <p>Login credentials are invalid. Please try again!</p>
+                            </div>
+                            <p class="mt-3 text-center">
+                                Don’t have an account? <router-link :to="{name: 'auth.signup'}">Click here to sign up.</router-link>
+                            </p>
                         </div>
                      </div>
                   </div>
@@ -87,7 +70,51 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
-  name: 'SignIn'
+  name: 'SignIn',
+  data () {
+    return {
+      success: false,
+      failed: false
+    }
+  },
+  methods: {
+    login: async function (email, password) {
+      try {
+        const res = await axios.post('https://www.stockit.live/api/auth/login', {
+          email: 'vaun890@gmail.com',
+          password: 'indigo890'
+        })
+        console.log(res)
+        if (res.status === 200) {
+          this.success = true
+          setTimeout(() => {
+            this.$router.push('/default')
+          }, 1500)
+        }
+      } catch (err) {
+        console.log(err)
+        this.failed = true
+        setTimeout(() => {
+          this.failed = false
+        }, 3000)
+      }
+    }
+  }
 }
 </script>
+<style lang="scss" scoped>
+.alertspec {
+  margin: 1rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+}
+.alertspec2 {
+  margin: 1rem;
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+}
+</style>
