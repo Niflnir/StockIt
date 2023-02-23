@@ -5,47 +5,45 @@
         <h4 class="card-title mb-2">Activity overview</h4>
       </template>
       <template v-slot:body>
-        <div class=" d-flex profile-media align-items-top mb-2">
+        <div class=" d-flex profile-media align-items-top mb-2" v-for="activity in activities.slice(0, maxMessageSize)" v-bind:key="activity.id">
           <div class="profile-dots-pills border-primary mt-1"></div>
           <div class="ms-4">
-            <h6 class=" mb-1">$2400, Purchase</h6>
-            <span class="mb-0">11 JUL 8:10 PM</span>
-          </div>
-        </div>
-        <div class=" d-flex profile-media align-items-top mb-2">
-          <div class="profile-dots-pills border-primary mt-1"></div>
-          <div class="ms-4">
-            <h6 class=" mb-1">New order #8744152</h6>
-            <span class="mb-0">11 JUL 11 PM</span>
-          </div>
-        </div>
-        <div class=" d-flex profile-media align-items-top mb-2">
-          <div class="profile-dots-pills border-primary mt-1"></div>
-          <div class="ms-4">
-            <h6 class=" mb-1">Affiliate Payout</h6>
-            <span class="mb-0">11 JUL 7:64 PM</span>
-          </div>
-        </div>
-        <div class=" d-flex profile-media align-items-top mb-2">
-          <div class="profile-dots-pills border-primary mt-1"></div>
-          <div class="ms-4">
-            <h6 class=" mb-1">New user added</h6>
-            <span class="mb-0">11 JUL 1:21 AM</span>
-          </div>
-        </div>
-        <div class=" d-flex profile-media align-items-top mb-1">
-          <div class="profile-dots-pills border-primary mt-1"></div>
-          <div class="ms-4">
-            <h6 class=" mb-1">Product added</h6>
-            <span class="mb-0">11 JUL 4:50 AM</span>
+            <h6 class=" mb-1">{{activity.Title}}</h6>
+            <span class="mb-0">{{activity.Date}}</span>
           </div>
         </div>
       </template>
     </iq-card>
   </div>
 </template>
-<script setup>
+<script>
+import axios from 'axios'
 
+export default {
+  props: {
+    maxMessageSize: Number
+  },
+  data () {
+    return {
+      activities: []
+    }
+  },
+  async mounted () {
+    // query the back-end server for coockie
+    const res = await axios.post('https://www.stockit.live/api/auth/login', {
+      email: 'vaun890@gmail.com',
+      password: 'indigo890'
+    })
+    console.log(res)
+    // query the activity endpoint
+    const activities = await axios.get('https://stockit.live/api/activitylogs')
+    // assign each activity with unique id for v-for loop
+    activities.data.forEach((activity, index) => {
+      activity.id = index
+    })
+    this.activities = activities.data
+  }
+}
 </script>
 <style lang="">
 
