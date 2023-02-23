@@ -16,6 +16,7 @@
     </div>
     <button class="btn btn-outline-primary btnExtra" type="button" id="optionBtn1" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Products</button>
     <button class="btn btn-outline-success btnExtra" type="button" id="optionBtn2" data-bs-toggle="modal" data-bs-target="#exportModal">Export to CSV</button>
+    <button class="btn btn-outline-secondary btnExtra" type="button" id="optionBtn3" @click="getproducts()">Tester</button>
     <div class="text">
       Total Items: {{ filteredList().length }}
     </div>
@@ -171,6 +172,9 @@
 <script>
 import axios from 'axios'
 export default {
+  // mounted () {
+  //   this.items = this.getproducts()
+  // },
   data () {
     return {
       input: '',
@@ -341,6 +345,18 @@ export default {
         console.log(res.status)
         if (res.status === 201) {
           return true
+        }
+      } catch (err) {
+        console.log(err)
+        return false
+      }
+    },
+    getproducts: async function () {
+      try {
+        const res = await axios.get('https://www.stockit.live/api/shopify/products')
+        console.log(res)
+        if (res.status === 201) {
+          return res.data
         }
       } catch (err) {
         console.log(err)
