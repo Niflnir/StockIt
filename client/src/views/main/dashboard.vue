@@ -278,7 +278,7 @@
       <div class="col-md-12 col-lg-4">
          <div class="row">
             <div class="col-md-12 col-lg-12">
-               <iq-card headerClass="flex-wrap" data-aos="fade-up" data-aos-delay="400">
+               <iq-card headerClass="flex-wrap" data-aos="fade-up" data-aos-delay="400" v-on:click="onClickActivityOverview" class="hoverable">
                   <template v-slot:headerTitle>
                         <h4 class="card-title mb-2">Activity overview</h4>
                         <p class="mb-0">
@@ -576,6 +576,16 @@ export default {
         duration: 800
       })
     }
+  },
+  methods: {
+    onClickActivityOverview () {
+      this.$router.push('default/activity')
+    }
   }
 }
 </script>
+<style>
+hoverable {
+  cursor: pointer;
+}
+</style>
