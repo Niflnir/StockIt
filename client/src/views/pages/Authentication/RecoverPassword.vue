@@ -8,15 +8,6 @@
             <div class="col-md-6 p-0">
                <div class="card card-transparent auth-card shadow-none d-flex justify-content-center mb-0">
                   <div class="card-body">
-                     <router-link  :to="{name: 'default.dashboard'}" class="navbar-brand d-flex align-items-center mb-3">
-                        <svg width="30" class="text-primary" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                           <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor"/>
-                           <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor"/>
-                           <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor"/>
-                           <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"/>
-                        </svg>
-                        <h4 class="logo-title ms-3">Hope UI</h4>
-                     </router-link>
                      <h2 class="mb-2">Reset Password</h2>
                      <p>Enter your email address and we'll send you an email with instructions to reset your password.</p>
                      <form>
@@ -24,7 +15,7 @@
                            <div class="col-lg-12">
                               <div class="floating-label form-group">
                                  <label for="email" class="form-label">Email</label>
-                                 <input type="email" class="form-control" id="email" aria-describedby="email" placeholder=" ">
+                                 <input type="email" class="form-control" id="email" aria-describedby="email" placeholder=" " v-model="email">
                               </div>
                            </div>
                         </div>
@@ -48,7 +39,31 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
-  name: 'RecoverPassword'
+  name: 'RecoverPassword',
+  data () {
+    return {
+      email: ''
+    }
+  },
+  methods: {
+    resetemail: async function () {
+      try {
+        const res = await axios.post('https://www.stockit.live/api/auth/login', {
+          email: this.email
+        })
+        console.log(res)
+        if (res.status === 200) {
+          alert('Instructions has been sent to your email')
+          setTimeout(() => {
+            this.$router.push('/signin')
+          }, 1500)
+        }
+      } catch (err) {
+        alert('Email does not exist')
+      }
+    }
+  }
 }
 </script>

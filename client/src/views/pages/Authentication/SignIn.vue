@@ -7,28 +7,19 @@
                   <div class="col-md-10">
                      <div class="card card-transparent shadow-none d-flex justify-content-center mb-0 auth-card">
                         <div class="card-body">
-                           <router-link  :to="{name: 'default.dashboard'}" class="navbar-brand d-flex align-items-center mb-3">
-                              <svg width="30" class="text-primary" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                 <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor"/>
-                                 <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor"/>
-                                 <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor"/>
-                                 <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"/>
-                              </svg>
-                              <h4 class="logo-title ms-3">Hope UI</h4>
-                           </router-link>
                            <h2 class="mb-2 text-center">Sign In</h2>
                            <p class="text-center">Login to stay connected.</p>
                             <div class="row">
                                 <div class="col-lg-12">
                                   <div class="form-group">
                                       <label for="email" class="form-label">Email</label>
-                                      <input type="email" class="form-control" id="email" aria-describedby="email" placeholder=" ">
+                                      <input type="email" class="form-control" id="email" aria-describedby="email" placeholder=" " v-model="email">
                                   </div>
                                 </div>
                                 <div class="col-lg-12">
                                   <div class="form-group">
                                       <label for="password" class="form-label">Password</label>
-                                      <input type="password" class="form-control" id="password" aria-describedby="password" placeholder=" ">
+                                      <input type="password" class="form-control" id="password" aria-describedby="password" placeholder=" " v-model="password">
                                   </div>
                                 </div>
                                 <div class="col-lg-12 d-flex justify-content-between">
@@ -76,15 +67,19 @@ export default {
   data () {
     return {
       success: false,
-      failed: false
+      failed: false,
+      email: '',
+      password: ''
     }
   },
   methods: {
-    login: async function (email, password) {
+    login: async function () {
       try {
         const res = await axios.post('https://www.stockit.live/api/auth/login', {
-          email: 'vaun890@gmail.com',
-          password: 'indigo890'
+          // email: 'vaun890@gmail.com',
+          // password: 'indigo890',
+          email: this.email,
+          password: this.password
         })
         console.log(res)
         if (res.status === 200) {
