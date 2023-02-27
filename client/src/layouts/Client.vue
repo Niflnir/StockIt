@@ -5,7 +5,7 @@
       <div class="topbar">
         <div class="title">{{ currentPathName }}</div>
         <div class="profile">
-          <div class="profilename">Bobbilicious The Third</div>
+          <div class="profilename">{{ username }}</div>
           <div class="dropdown">
             <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               <img src="../assets/images/avatars/avtar_1.png" class="profilepic" alt="Avatar">
@@ -20,8 +20,32 @@
     </div>
   </div>
 </template>
-<script setup>
+<script>
 import Navbar from '../views/main/Navbar.vue'
+export default {
+  name: 'App',
+  components: {
+    Navbar
+  },
+  data () {
+    return {
+      username: 'Bob the Builder'
+    }
+  },
+  mounted () {
+    this.updateUsername()
+  },
+  watch: {
+    '$username.value': {
+      handler: function () { this.updateUsername() }, deep: true
+    }
+  },
+  methods: {
+    updateUsername () {
+      this.username = this.$username.value
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css2?family=Mulish&display=swap');

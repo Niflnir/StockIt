@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, ref } from 'vue'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
@@ -24,6 +24,7 @@ app.use(router)
 app.use(globalComponent)
 app.use(UseCSVButton)
 app.use(VueAxios, axios)
+app.config.globalProperties.$username = ref('Bob the Builder3')
 app.provide('axios', app.config.globalProperties.axios)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.mount('#app')

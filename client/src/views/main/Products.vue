@@ -16,7 +16,6 @@
     </div>
     <button class="btn btn-outline-primary btnExtra" type="button" id="optionBtn1" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Products</button>
     <button class="btn btn-outline-success btnExtra" type="button" id="optionBtn2" data-bs-toggle="modal" data-bs-target="#exportModal">Export to CSV</button>
-    <button class="btn btn-outline-secondary btnExtra" type="button" id="optionBtn3" @click="getproducts()">Tester</button>
     <div class="text">
       Total Items: {{ filteredList().length }}
     </div>
@@ -25,19 +24,19 @@
         <div class="colname">
           <div class="colitem">Item</div>
           <div class="colqty">Quantity</div>
-          <div class="coltags">Tags</div>
+          <div class="coltags">Status</div>
         </div>
         <div v-for="item in filteredList()" :key="item" >
           <div class="productitem" @click="onClickItem(item)">
-            <img src="../../assets/images/icons/stockit_logo.png" alr="Vue">
-            <div class="productname">{{ item.name }}</div>
+            <img v-bind:src="item.image" alr="Vue">
+            <div class="productname">{{ item.title }}</div>
             <div class="productquantity">{{ item.quantity }}</div>
-            <div class="producttags">{{ item.tags  }}</div>
+            <div class="producttags">{{ item.status  }}</div>
           </div>
         </div>
       </div>
       <div class="rightcontainer">
-        <div class="image">
+        <div v-if="this.selected == null" class="image">
           <img src="../../assets/images/icons/stockit_logo.png" alr="Vue">
         </div>
         <div v-if="this.selected == null">
@@ -45,18 +44,24 @@
         </div>
         <div v-else>
           <div v-if="!isEditMode">
-            <div class="item">Title: {{ selected.name }}</div>
-            <div class="sku">SKU: {{ selected.sku }}</div>
-            <div class="qty">Quantity: {{ selected.quantity }}</div>
-            <div class="price">Price: {{ selected.price }}</div>
-            <div class="platform">Platforms</div>
-            <buttons buttonClass="btn-light" v-on:click="onClickEditButton">Edit</buttons>
+            <div class="image">
+              <img v-bind:src="this.selected.image" alr="Vue">
+            </div>
+            <div class="item">Title: {{ selected.title }}</div>
+            <div class="item">Product ID: {{ selected.product_id }}</div>
+            <div class="item">Quantity: {{ selected.quantity }}</div>
+            <div class="item">Price: {{ selected.price }}</div>
+            <div class="item">Platforms:</div>
+            <buttons buttonClass="btn-light editbtn" v-on:click="onClickEditButton">Edit</buttons>
           </div>
           <div v-else>
+            <div class="image">
+              <img v-bind:src="this.selected.image" alr="Vue">
+            </div>
             Title:
-            <input type="text" class="form-control" v-model="editBuffer.name">
-            SKU:
-            <input type="text" class="form-control" v-model="editBuffer.sku">
+            <input type="text" class="form-control" v-model="editBuffer.title">
+            Product ID:
+            <input type="text" class="form-control" v-model="editBuffer.product_id" disabled>
             Quantity:
             <input type="text" class="form-control" v-model="editBuffer.quantity">
             Price:
@@ -87,9 +92,9 @@
           </div>
           <div class="modal-body" v-else>
             Title:
-            <input type="text" class="form-control" v-model="editBuffer.name">
+            <input type="text" class="form-control" v-model="editBuffer.title">
             Description:
-            <input type="text" class="form-control" v-model="editBuffer.sku">
+            <input type="text" class="form-control" v-model="editBuffer.desc">
             Quantity:
             <input type="text" class="form-control" v-model="editBuffer.quantity">
             Price ($):
@@ -111,34 +116,11 @@
             <br>
             <button type="button" class="btn btn-secondary" @click="isAddProductMode = false">Cancel</button>
             <buttons buttonClass="btn-primary createbtn" v-on:click="onClickCreateButton">Create</buttons>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="singleProductModal" tabindex="-1" aria-labelledby="singleProductLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="singleProductLabel">Key in Product Details</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="inputtitle">Item Name</div>
-            <input type="text"  />
-            <div class="inputtitle">Item ID</div>
-            <input type="text" />
-            <div class="inputtitle">Quantity</div>
-            <input type="text"  />
-            <div class="inputtitle">Price</div>
-            <div class="input-box">
-              <input type="text"  />
-              <span class="unit">$</span>
+            <div class="ctrspinner" v-if="addProductLoader">
+              <div class="spinner-border text-dark" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </div>
-            <div class="inputtitle">Select Platforms</div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary">Add Product</button>
           </div>
         </div>
       </div>
@@ -172,9 +154,9 @@
 <script>
 import axios from 'axios'
 export default {
-  // mounted () {
-  //   this.items = this.getproducts()
-  // },
+  mounted () {
+    this.updateitemlist()
+  },
   data () {
     return {
       input: '',
@@ -182,35 +164,28 @@ export default {
       downloading: false,
       searchOption: 'Any',
       statusoption: 'active',
-      items: [
-        { name: 'apple', quantity: '661', tags: 'fruit, edible', sku: 'SKU456239407', price: '$1.20' },
-        { name: 'happy clouds floating', quantity: '181', tags: 'fruit, edible', sku: 'SKU370540450', price: '$3.50' },
-        { name: 'orange', quantity: '161', tags: 'fruit, edible', sku: 'SKU196856072', price: '$3.50' },
-        { name: 'pineapple', quantity: '11', tags: 'fruit, edible', sku: 'SKU399405582', price: '$13.85' },
-        { name: 'turbo boosted ultr extreme tuna', quantity: '16', tags: 'fruit, edible', sku: 'SKU830832967', price: '$1.20' },
-        { name: 'dancing in the moon night on the shore', quantity: '23', tags: 'fruit, edible', sku: 'SKU456239407', price: '$13.85' },
-        { name: 'dreams chaser sky horizon', quantity: '1616', tags: 'fruit, edible', sku: 'SKU411406106' },
-        { name: 'apple tomato sausage', quantity: '661', tags: 'fruit, edible', sku: 'SKU583707086', price: '$1.20' },
-        { name: 'data must be a function.', quantity: '181', tags: 'fruit, edible', sku: 'SKU797661811' },
-        { name: 'Thanks for this answer. the first <div was a typo.', quantity: '161', tags: 'fruit, edible', sku: 'SKU456239407', price: '$13.85' },
-        { name: 'Browse other questions tagged', quantity: '11', tags: 'fruit, edible', sku: 'SKU662867303', price: '$13.85' },
-        { name: 'Music playing softly Music playing softly', quantity: '16', tags: 'fruit, edible', sku: 'SKU445225984', price: '$1.20' },
-        { name: 'The world spins round', quantity: '23', tags: 'fruit, edible', sku: 'SKU456239407', price: '$1.20' },
-        { name: 'Running through the fields with the wind at my back', quantity: '1616', tags: 'fruit, edible', sku: 'SKU476671907', price: '$3.50' },
-        { name: 'sound of rain tapping on the windowpane', quantity: '161', tags: 'fruit, edible', sku: 'SKU116496296' },
-        { name: 'peaceful silence', quantity: '11', tags: 'fruit, edible', sku: 'SKU715257277', price: '$3.50' },
-        { name: 'Music playing softly Music playing softly', quantity: '16', tags: 'fruit, edible', sku: 'SKU463427997' },
-        { name: 'freshly baked cookies', quantity: '23', tags: 'fruit, edible', sku: 'SKU648004666' },
-        { name: 'crisp mountain air', quantity: '1616', tags: 'fruit, edible', sku: 'SKU456239407', price: '$13.85' }
-      ],
+      items: null,
       isEditMode: false,
       productdetails: null,
       editBuffer: null,
       imagefile: null,
-      isAddProductMode: false
+      isAddProductMode: false,
+      addProductLoader: false
     }
   },
   methods: {
+    async updateitemlist () {
+      try {
+        const res = await axios.get('https://www.stockit.live/api/allproducts')
+        console.log(res.data)
+        if (res.status === 200) {
+          this.items = res.data
+        }
+      } catch (err) {
+        console.log(err)
+        return false
+      }
+    },
     convertBase64 (file) {
       return new Promise((resolve, reject) => {
         const fileReader = new FileReader()
@@ -245,9 +220,13 @@ export default {
       this.searchOption = sel
     },
     filteredList () {
-      return this.items.filter((item) =>
-        item.name.toLowerCase().includes(this.input.toLowerCase())
-      )
+      if (this.items) {
+        return this.items.filter((item) =>
+          item.title.toLowerCase().includes(this.input.toLowerCase())
+        )
+      } else {
+        return []
+      }
     },
     /**
      * Stores the item clicked in variable for display
@@ -266,15 +245,11 @@ export default {
      * Input validation included.
      */
     onClickUpdateButton () {
-      // find the index of selected item based on sku
-      const index = this.items.findIndex((item) => item.sku === this.selected.sku)
+      // find the index of selected item based on product id
+      const index = this.items.findIndex((item) => item.product_id === this.selected.product_id)
       // validate the input
-      if (this.editBuffer.name === '') {
-        alert('Name cannot be empty')
-        return
-      }
-      if (this.editBuffer.sku === '') {
-        alert('sku cannot be empty')
+      if (this.editBuffer.title === '') {
+        alert('Title cannot be empty')
         return
       }
       if (this.editBuffer.quantity < 0) {
@@ -285,8 +260,6 @@ export default {
         alert('Price cannot be empty')
         return
       }
-      // update the item
-      this.items[index] = this.editBuffer
       // update the UI status
       this.isEditMode = false
       this.editBuffer = null
@@ -295,17 +268,17 @@ export default {
     onClickAddProduct () {
       this.isAddProductMode = true
       this.editBuffer = {
-        name: '',
+        title: '',
+        desc: '',
         quantity: 0,
-        tags: '',
-        sku: '',
-        price: ''
+        price: '',
+        status: ''
       }
     },
     async onClickCreateButton () {
       // validate the input
-      if (this.editBuffer.name === '') {
-        alert('Name cannot be empty')
+      if (this.editBuffer.title === '') {
+        alert('Title cannot be empty')
         return
       }
       if (this.editBuffer.desc === '') {
@@ -324,18 +297,20 @@ export default {
         alert('Image cannot be empty')
         return
       }
-      // add the item
-      this.items.push(this.editBuffer)
       // update the ui
-      this.isAddProductMode = false
-      if (await this.sendnewproduct()) alert('Product added successfully')
-      else alert('Product add failed. Please try again')
+      this.addProductLoader = true
+      if (await this.sendnewproduct()) {
+        alert('Product added successfully')
+        this.updateitemlist()
+      } else alert('Product add failed. Please try again')
+      this.addProductLoader = false
     },
     sendnewproduct: async function () {
       try {
-        console.log(this.editBuffer, this.statusoption, this.imagefile)
+        this.editBuffer.quantity = Number(this.editBuffer.quantity)
+        console.log(this.editBuffer, this.statusoption)
         const res = await axios.post('https://www.stockit.live/api/shopify/products', {
-          title: this.editBuffer.name,
+          title: this.editBuffer.title,
           description: this.editBuffer.desc,
           price: this.editBuffer.price,
           quantity: this.editBuffer.quantity,
@@ -357,6 +332,26 @@ export default {
         console.log(res)
         if (res.status === 201) {
           return res.data
+        }
+      } catch (err) {
+        console.log(err)
+        return false
+      }
+    },
+    async updateproduct () {
+      try {
+        const res = await axios.put('https://www.stockit.live/api/shopify/products', {
+          title: this.editBuffer.title,
+          description: this.editBuffer.desc,
+          price: this.editBuffer.price,
+          quantity: this.editBuffer.quantity,
+          status: this.statusoption,
+          image: this.imagefile,
+          product_id: this.editBuffer.product_id
+        })
+        console.log(res)
+        if (res.status === 201) {
+          return true
         }
       } catch (err) {
         console.log(err)
@@ -507,23 +502,11 @@ export default {
         width: 10vw;
       }
       .item {
-        padding: 20px;
-        border-bottom: #cbcbcb 1px solid;
+        width: 18vw;
+        padding: 10px;
       }
-      .sku {
-        padding: 20px;
-        border-bottom: #cbcbcb 1px solid;
-      }
-      .qty {
-        padding: 20px;
-        border-bottom: #cbcbcb 1px solid;
-      }
-      .price {
-        padding: 20px;
-        border-bottom: #cbcbcb 1px solid;
-      }
-      .platform {
-        padding: 20px;
+      .editbtn {
+        margin: 10px;
       }
       .emptytext {
         font-weight: bold;
@@ -626,6 +609,9 @@ export default {
       box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
         rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     }
+  }
+  .ctrspinner {
+    padding: 10px;
   }
 }
 </style>
