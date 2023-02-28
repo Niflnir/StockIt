@@ -26,6 +26,9 @@
           <div class="colqty">Quantity</div>
           <div class="coltags">Status</div>
         </div>
+        <div class="spinner-border text-dark itemload" v-if="filteredList().length == 0" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
         <div v-for="item in filteredList()" :key="item" >
           <div class="productitem" @click="onClickItem(item)">
             <img v-bind:src="item.image" alr="Vue">
@@ -204,16 +207,24 @@ export default {
       this.imagefile = base64.split(',')[1]
       console.log(this.imagefile)
     },
-    startDownload () {
+    async startDownload () {
       this.downloading = true
+      axios({
+        url: 'https://www.stockit.live/api/exportcsv',
+        method: 'GET',
+        responseType: 'blob'
+      }).then((response) => {
+        const href = URL.createObjectURL(response.data)
+        const link = document.createElement('a')
+        link.href = href
+        link.setAttribute('download', 'data.csv')
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(href)
+      })
       setTimeout(() => {
         this.downloading = false
-        document.querySelector('#exportModal').classList.remove('show')
-        document.querySelector('body').classList.remove('modal-open')
-        const mdbackdrop = document.querySelector('.modal-backdrop')
-        if (mdbackdrop) {
-          mdbackdrop.classList.remove('modal-backdrop', 'show')
-        }
       }, 1000)
     },
     flipselection (sel) {
@@ -419,6 +430,10 @@ export default {
       flex-direction: column;
       float: left;
       width: 55vw;
+      .itemload {
+        margin-left: 25vw;
+        margin-top: 10vh;
+      }
       .colname {
         display: flex;
         flex-direction: row;

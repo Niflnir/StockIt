@@ -5,7 +5,7 @@
     <div class="white-box">
       <div class="platform-display">
         <div class="display-row">
-          <div class="card" @click="apiget()">
+          <div class="card" @click="apiget()" :class="{ green_outline: shopify }">
             <img src="../../assets/images/platforms/shopify.webp" class="card-img-top" alt="...">
           </div>
           <div class="card">
@@ -36,16 +36,32 @@
 </template>
 <script>
 import axios from 'axios'
-
 export default {
   name: 'App',
-  setup () {
+  data () {
+    return {
+      shopify: false
+    }
+  },
+  mounted () {
+    this.checkConnection()
   },
   methods: {
     apiget: async function () {
       const res = await axios.get('https://www.stockit.live/api/shopify')
       window.open(res.data, '_blank', 'noreferrer')
       console.log(res)
+    },
+    async checkConnection () {
+      try {
+        const res = await axios.get('https://stockit.live/api/shopify/checktoken')
+        console.log(res)
+        if (res.status === 200) {
+          this.shopify = true
+        }
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }
@@ -82,6 +98,11 @@ export default {
         display: flex;
         flex-direction: row;
       }
+      .green_outline {
+        border-color: #76b17e;
+        border-width: 3px;
+        pointer-events: none;
+      }
       .card {
         display: flex;
         justify-content: center;
@@ -111,7 +132,7 @@ export default {
     .green-dot {
       width: 10px;
       height: 10px;
-      background-color: #25ff42;
+      background-color: #76b17e;
       border-radius: 10px;
       margin: 10px;
       box-shadow: 0 10px 30px 0 rgb(17 38 146 / 5%);
