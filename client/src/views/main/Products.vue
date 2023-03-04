@@ -9,7 +9,7 @@
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           <li><a class="dropdown-item" href="#" @click="searchOption = 'Any'">Any</a></li>
-          <li><a class="dropdown-item" href="#" @click="searchOption = 'By Tags'">By Tags</a></li>
+          <li><a class="dropdown-item" href="#" @click="searchOption = 'By Status'">By Status</a></li>
           <li><a class="dropdown-item" href="#" @click="searchOption = 'By Platforms'">By Platforms</a></li>
         </ul>
       </div>
@@ -31,7 +31,8 @@
         </div>
         <div v-for="item in filteredList()" :key="item" >
           <div class="productitem" @click="onClickItem(item)">
-            <img v-bind:src="item.image" alr="Vue">
+            <img v-if="item.image" v-bind:src="item.image" alr="Vue">
+            <img v-else src="../../assets/images/icons/stockit_no_img.png" alt="No Image">
             <div class="productname">{{ item.title }}</div>
             <div class="productquantity">{{ item.quantity }}</div>
             <div class="producttags">{{ item.status  }}</div>
@@ -48,7 +49,8 @@
         <div v-else>
           <div v-if="!isEditMode">
             <div class="image">
-              <img v-bind:src="this.selected.image" alr="Vue">
+              <img v-if="this.selected.image" v-bind:src="this.selected.image" alr="Vue">
+              <img v-else src="../../assets/images/icons/stockit_no_img.png" alt="No Image">
             </div>
             <div class="item">Title: {{ selected.title }}</div>
             <div class="item">Product ID: {{ selected.product_id }}</div>
@@ -59,7 +61,8 @@
           </div>
           <div v-else>
             <div class="image">
-              <img v-bind:src="this.selected.image" alr="Vue">
+              <img v-if="this.selected.image" v-bind:src="this.selected.image" alr="Vue">
+              <img v-else src="../../assets/images/icons/stockit_no_img.png" alt="No Image">
             </div>
             Title:
             <input type="text" class="form-control" v-model="editBuffer.title">
@@ -70,7 +73,7 @@
             Price:
             <input type="text" class="form-control" v-model="editBuffer.price">
             <buttons buttonClass="btn-danger" v-on:click="this.isEditMode = false">Cancel</buttons>
-            <buttons buttonClass="btn-success" v-on:click="onClickEditButton">Update</buttons>
+            <buttons buttonClass="btn-success" v-on:click="onClickUpdateButton">Update</buttons>
           </div>
         </div>
       </div>
@@ -272,8 +275,7 @@ export default {
         return
       }
       // update the UI status
-      this.isEditMode = false
-      this.editBuffer = null
+      this.updateproduct()
       this.selected = this.items[index]
     },
     onClickAddProduct () {
@@ -351,22 +353,26 @@ export default {
     },
     async updateproduct () {
       try {
+        console.log(this.selected.image)
+        this.editBuffer.quantity = Number(this.editBuffer.quantity)
         const res = await axios.put('https://www.stockit.live/api/shopify/products', {
           title: this.editBuffer.title,
           description: this.editBuffer.desc,
           price: this.editBuffer.price,
           quantity: this.editBuffer.quantity,
-          status: this.statusoption,
-          image: this.imagefile,
+          status: this.editBuffer.status,
+          image: this.selected.image,
           product_id: this.editBuffer.product_id
         })
         console.log(res)
         if (res.status === 201) {
-          return true
+          alert('Product Information has updated successfully')
+          this.editBuffer = null
+          this.isEditMode = false
         }
       } catch (err) {
         console.log(err)
-        return false
+        alert('Update has failed. Please try again!')
       }
     }
   }
@@ -515,6 +521,7 @@ export default {
       }
       img {
         width: 10vw;
+        max-height: 12vw;
       }
       .item {
         width: 18vw;
