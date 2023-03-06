@@ -7,16 +7,12 @@
                   <SwiperSlide class="swiper-slide card card-slide swiper-slide-active" data-aos="fade-up" data-aos-delay="700" role="group" aria-label="1 / 7" style="width: 318px; margin-right: 32px;">
                      <div class="card-body">
                         <div class="progress-widget">
-                           <div id="circle-progress-01" class="circle-progress-01 circle-progress circle-progress-primary text-center" data-min-value="0" data-max-value="100" data-value="90" data-type="percent" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="90">
-                              <svg class="card-slie-arrow " width="24" height="24px" viewBox="0 0 24 24">
-                                 <path fill="currentColor" d="M5,17.59L15.59,7H9V5H19V15H17V8.41L6.41,19L5,17.59Z"></path>
-                              </svg>
-                              <svg version="1.1" width="100" height="100" viewBox="0 0 100 100" class="circle-progress"><circle class="circle-progress-circle" cx="50" cy="50" r="46" fill="none" stroke="#ddd" stroke-width="8"></circle><path d="M 50 4 A 46 46 0 1 1 22.96187839454623 12.785218258752423" class="circle-progress-value" fill="none" stroke="#00E699" stroke-width="8"></path><text class="circle-progress-text" x="50" y="50" font="16px Arial, sans-serif" text-anchor="middle" fill="#999" dy="0.4em">90%</text>
-                              </svg>
-                           </div>
-                           <div class="progress-detail">
+                          <div id="circle-progress-01" class="circle-progress-01 circle-progress circle-progress-primary text-center" data-min-value="0" data-max-value="100" data-value="50" data-type="percent" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+                            <svg version="1.1" width="100" height="100" viewBox="0 0 100 100" class="circle-progress"><circle class="circle-progress-circle" cx="50" cy="50" r="46" fill="none" stroke="#ddd" stroke-width="8"></circle><path d="M 50 4 A 46 46 0 0 1 50 96" class="circle-progress-value" fill="none" stroke="#00E699" stroke-width="8"></path><text class="circle-progress-text" x="50" y="50" font="16px Arial, sans-serif" text-anchor="middle" fill="#999" dy="0.4em">100%</text></svg></div>
+
+                          <div class="progress-detail">
                               <p class="mb-2">Total Sales</p>
-                              <h4 class="counter" style="visibility: visible;">$<Vue3autocounter  ref='counter' :startAmount='0' :endAmount='560'/>K</h4>
+                              <h4 class="counter" style="visibility: visible;">${{grossSales}}K</h4>
                            </div>
                         </div>
                      </div>
@@ -25,13 +21,10 @@
                      <div class="card-body">
                         <div class="progress-widget">
                            <div id="circle-progress-05" class="circle-progress-01 circle-progress circle-progress-primary text-center" data-min-value="0" data-max-value="100" data-value="50" data-type="percent" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
-                              <svg class="card-slie-arrow " width="24px" height="24px" viewBox="0 0 24 24">
-                                 <path fill="currentColor" d="M5,17.59L15.59,7H9V5H19V15H17V8.41L6.41,19L5,17.59Z"></path>
-                              </svg>
-                           <svg version="1.1" width="100" height="100" viewBox="0 0 100 100" class="circle-progress"><circle class="circle-progress-circle" cx="50" cy="50" r="46" fill="none" stroke="#ddd" stroke-width="8"></circle><path d="M 50 4 A 46 46 0 0 1 50 96" class="circle-progress-value" fill="none" stroke="#00E699" stroke-width="8"></path><text class="circle-progress-text" x="50" y="50" font="16px Arial, sans-serif" text-anchor="middle" fill="#999" dy="0.4em">50%</text></svg></div>
+                           <svg version="1.1" width="100" height="100" viewBox="0 0 100 100" class="circle-progress"><circle class="circle-progress-circle" cx="50" cy="50" r="46" fill="none" stroke="#ddd" stroke-width="8"></circle><path d="M 50 4 A 46 46 0 0 1 50 96" class="circle-progress-value" fill="none" stroke="#00E699" stroke-width="8"></path><text class="circle-progress-text" x="50" y="50" font="16px Arial, sans-serif" text-anchor="middle" fill="#999" dy="0.4em">100%</text></svg></div>
                            <div class="progress-detail">
                               <p class="mb-2">Total Orders</p>
-                              <h4 style="visibility: visible;"><Vue3autocounter  ref='counter' :startAmount='0' :endAmount='150'/>K</h4>
+                              <h4 style="visibility: visible;">{{totalOrders}}</h4>
                            </div>
                         </div>
                      </div>
@@ -49,7 +42,7 @@
             <div class="col-md-12">
                <iq-card headerClass="flex-wrap" data-aos="fade-up" data-aos-delay="800">
                   <template v-slot:headerTitle>
-                        <h4 class="card-title">$855.8K</h4>
+                        <h4 class="card-title">${{grossSales}}K</h4>
                         <p class="mb-0">Gross Sales</p>
                   </template>
                   <template v-slot:headerAction>
@@ -288,10 +281,10 @@
 import iqCard from '@/components/bootstrap/Cards/iq-card.vue'
 import ApexChart from '@/components/custom/charts/ApexChart'
 import Swiper from '@/components/custom/slider/Swiper'
-import Vue3autocounter from 'vue3-autocounter'
 import SwiperSlide from '@/components/custom/slider/SwiperSlide'
 import AOS from '@/plugins/aos/dist/aos.js'
 import Activity from './Activity'
+import axios from 'axios'
 export default {
   name: 'dashboard',
   components: {
@@ -299,33 +292,17 @@ export default {
     iqCard,
     ApexChart,
     Swiper,
-    Vue3autocounter,
     SwiperSlide
   },
   data () {
     return {
+      salesData: {},
+      totalSales: 0,
+      totalOrders: 10000,
+      grossSales: 0,
+      colorLists: ['#3a57e8', '#079aa2', '#f7b924', '#78f724'],
       dmain: {
-        series: [{
-          name: 'total',
-          data: [94, 80, 94, 80, 94, 80, 94],
-          color: '#3a57e8'
-        },
-        {
-          name: 'Lazada',
-          data: [74, 40, 54, 20, 74, 20, 84],
-          color: '#079aa2'
-        },
-        {
-          name: 'Shopee',
-          data: [24, 40, 34, 60, 24, 60, 14],
-          color: '#f7b924'
-        },
-        {
-          name: 'Tiki',
-          data: [24, 40, 34, 50, 11, 5, 14],
-          color: '#78f724'
-        }
-        ],
+        series: [],
         chart: {
           fontFamily: '"Inter", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
           height: 245,
@@ -372,7 +349,7 @@ export default {
           lines: {
             show: false // or just here to disable only x axis grids
           },
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug']
+          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
         },
         grid: {
           show: true
@@ -388,7 +365,7 @@ export default {
             opacityFrom: 0.4,
             opacityTo: 0.1,
             stops: [0, 50, 80],
-            colors: ['#3a57e8', '#4bc7d2', '#f7b924']
+            colors: ['#3a57e8', '#4bc7d2']
           }
         },
         tooltip: {
@@ -520,7 +497,7 @@ export default {
 
     }
   },
-  mounted () {
+  async mounted () {
     if (typeof AOS !== typeof undefined) {
       AOS.init({
         disable: function () {
@@ -531,6 +508,40 @@ export default {
         duration: 800
       })
     }
+    // query the back-end server for coockie
+    const res = await axios.post('https://www.stockit.live/api/auth/login', {
+      email: 'vaun890@gmail.com',
+      password: 'indigo890'
+    })
+    console.log(res)
+    // query the activity endpoint
+    const salesInfo = await axios.get('https://stockit.live/api/salesinfo')
+    console.log(salesInfo)
+    // iterate over salesInfo's totalGrossList and push the values into the chart's series
+    let counter = 1
+    salesInfo.data.totalGrossList.forEach((gross) => {
+      this.dmain.series.push({
+        name: gross.platform,
+        data: gross.grossByMonthList.map(x => x.gross / 1000),
+        color: this.colorLists[counter]
+      })
+      counter = counter + 1
+    })
+    console.log(this.dmain.series)
+    // add "total" series by aggregating each platform's gross sales
+    this.dmain.series.push({
+      name: 'Total',
+      data: salesInfo.data.totalGrossList[0].grossByMonthList.map((x, i) => {
+        return salesInfo.data.totalGrossList.reduce((acc, curr) => {
+          return acc + curr.grossByMonthList[i].gross
+        }, 0) / 1000
+      }),
+      color: this.colorLists[0]
+    })
+    // get the sum of elements of total series
+    this.grossSales = this.dmain.series[this.dmain.series.length - 1].data.reduce((acc, curr) => {
+      return acc + curr
+    }, 0)
   },
   methods: {
     onClickActivityOverview () {
