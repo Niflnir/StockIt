@@ -30,14 +30,6 @@
             <span class="text">Products</span>
           </div>
         </router-link>
-        <router-link class="button" to="/default/support">
-          <div class="container">
-            <div class="icon">
-              <font-awesome-icon icon="fa-fw fa-solid fa-user" />
-            </div>
-            <span class="text">Support</span>
-          </div>
-        </router-link>
         <router-link class="button" to="/default/activity">
           <div class="container">
             <div class="icon">

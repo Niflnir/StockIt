@@ -5,7 +5,6 @@
       chat-title="Chatbot"
       agent-id="8c6e64b0-4819-48ca-97b6-2f7a7407be58"
       language-code="en"
-      expand="true"
     ></df-messenger>
   </div>
 </template>

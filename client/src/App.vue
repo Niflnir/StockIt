@@ -1,11 +1,16 @@
 <template>
-  <router-view/>
+  <div>
+    <router-view/>
+    <Support></Support>
+  </div>
 </template>
 
 <script>
 import 'nouislider/dist/nouislider.css'
+import Support from './views/main/Support'
 export default {
-  name: 'App'
+  name: 'App',
+  components: { Support }
 }
 </script>
 <style lang="scss">
