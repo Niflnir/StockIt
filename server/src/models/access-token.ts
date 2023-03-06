@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 // An interface that describes the properties
 // that are required to make a new User
-interface AccessTokenAttrs {
+export interface AccessTokenAttrs {
   userId: string;
   token: string;
   platform: string;

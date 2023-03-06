@@ -122,32 +122,11 @@ paths:
   /api/shopify:
     get:
       summary: Connect StockIt to Shopify store
-      parameters:
-        - in: query
-          name: store
-          required: true
-          schema:
-            type: string
-          description: The name of the Shopify store
       tags:
         - Shopify
-      responses:
-        200:
-          description: Successfully connected to Shopify store
-        400:
-          description: Failed to connect to Shopify store, store name is missing
-        401:
-          description: User not authenticated
-  /api/shopify/products/{store}:
+  /api/shopify/products:
     get:
       summary: Retrieve all products from Shopify store
-      parameters:
-        - in: path
-          name: store
-          required: true
-          schema:
-            type: string
-          description: The name of the Shopify store
       tags:
         - Shopify
       responses:
@@ -160,9 +139,9 @@ paths:
     post:
       summary: Create a product in Shopify store
       parameters:
-        - in: path
+        - in: query
           name: store
-          required: true
+          required: false
           schema:
             type: string
           description: The name of the Shopify store
@@ -180,6 +159,7 @@ paths:
                 - price
                 - quantity
                 - status
+                - image
               properties:
                 title:
                   type: string
@@ -196,12 +176,9 @@ paths:
                 status:
                   type: string
                   description: active or draft
-              example:
-                title: Blue Jeans
-                description: Blue jeans made from the best quality fabric!
-                price: 15
-                quantity: 5
-                status: draft
+                image:
+                  type: string
+                  description: base64 encoded image
       responses:
         201:
           description: Product successfully created in Shopify store
@@ -214,18 +191,11 @@ paths:
                     type: string
                     description: Id of the Shopify product that was added
         400:
-          description: Failed to create Product in Shopify store
+          description: Failed to add product to Shopify store
         401:
           description: User not authenticated
     delete:
       summary: Delete a product from Shopify store
-      parameters:
-        - in: path
-          name: store
-          required: true
-          schema:
-            type: string
-          description: The name of the Shopify store
       tags:
         - Shopify
       requestBody:
@@ -248,13 +218,6 @@ paths:
           description: User not authenticated
     put:
       summary: Update a product in Shopify store
-      parameters:
-        - in: path
-          name: store
-          required: true
-          schema:
-            type: string
-          description: The name of the Shopify store
       tags:
         - Shopify
       requestBody:
@@ -329,3 +292,28 @@ paths:
           description: Failed to connect to Lazada store | Invalid status filter
         401:
           description: User not authenticated
+  /api/activitylogs:
+    get:
+      summary: Get user's activity logs
+    tags:
+      - General
+    responses:
+      200:
+        description: Successfully retrieved user's activity logs
+      401:
+        description: User not authenticated
+  /api/exportcsv:
+    get:
+      summary: Export csv file of all of user's products
+    tags:
+      - General
+    responses:
+      200:
+        description: Successfully retrieved user's activity logs
+      401:
+        description: User not authenticated
+  /api/allproducts:
+    get:
+      summary: Get all of user's products from all platforms
+      tags:
+        - General
