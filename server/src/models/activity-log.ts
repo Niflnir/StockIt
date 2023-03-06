@@ -1,21 +1,15 @@
 import mongoose from "mongoose";
 
-// An interface that describes the properties
-// that are required to make a new User
 interface ActivityLogAttrs {
   userId: string;
   description: string;
   createdAt: string;
 }
 
-// An interface that describes the properties
-// that a User Model has
 interface ActivityLogModel extends mongoose.Model<ActivityLogDoc> {
   build(attrs: ActivityLogAttrs): ActivityLogDoc;
 }
 
-// An interface that describes the properties
-// that a User Model has
 interface ActivityLogDoc extends mongoose.Document {
   userId: string;
   description: string;

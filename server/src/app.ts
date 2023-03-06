@@ -28,10 +28,15 @@ import { shopifyAddProductRouter } from "./routes/shopify/products/addProduct";
 import { shopifyDeleteProductRouter } from "./routes/shopify/products/deleteProduct";
 import { shopifyUpdateProductRouter } from "./routes/shopify/products/updateProduct";
 import { lazadaInstallRouter } from "./routes/lazada/install";
-import { importCSVRouter } from "./routes/csv";
+import { importCSVRouter } from "./routes/import-csv";
 import { lazadaGetProductsRouter } from "./routes/lazada/products/getProducts";
 import { shopifyConnectRouter } from "./routes/shopify/connect";
-import { activityLogsRouter } from "./routes/getActivityLogs";
+import { activityLogsRouter } from "./routes/get-activity-logs";
+import { shopifyCheckTokenRouter } from "./routes/shopify/check-token";
+import { allProductsRouter } from "./routes/get-all-products";
+import { lazadaCheckTokenRouter } from "./routes/lazada/check-token";
+import { exportCSVRouter } from "./routes/export-csv";
+import { salesInfoRouter } from "./routes/get-sales-info";
 
 const app = express();
 
@@ -62,6 +67,7 @@ app.use(shopifyGetProductsRouter);
 app.use(shopifyAddProductRouter);
 app.use(shopifyDeleteProductRouter);
 app.use(shopifyUpdateProductRouter);
+app.use(shopifyCheckTokenRouter);
 
 // Ebay
 app.use(ebayCallbackRouter);
@@ -76,12 +82,16 @@ app.use(ebayListOffersRouter);
 app.use(lazadaInstallRouter);
 app.use(lazadaCallbackRouter);
 app.use(lazadaGetProductsRouter);
+app.use(lazadaCheckTokenRouter);
 
 // CSV
 app.use(importCSVRouter);
+app.use(exportCSVRouter);
 
-// Activity Logs
+// General
 app.use(activityLogsRouter);
+app.use(allProductsRouter);
+app.use(salesInfoRouter);
 
 // Swagger
 app.use(

@@ -77,7 +77,7 @@ router.post("/api/shopify/products", async (req: Request, res: Response) => {
       existingAccessToken.userId,
       `Failed adding ${title} to Shopify store`
     );
-    throw new BadRequestError("Error adding product to Shopify store");
+    throw new BadRequestError("Failed to add product to Shopify store");
   }
 });
 

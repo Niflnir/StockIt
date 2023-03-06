@@ -1,6 +1,7 @@
 import axios, { isAxiosError } from "axios";
 import express, { Request, Response } from "express";
-import { BadRequestError } from "../utils/utils";
+import { saveActivity } from "../services/save-activity";
+import { BadRequestError, requireAuth } from "../utils/utils";
 
 const router = express.Router();
 interface csvRow {
@@ -37,12 +38,13 @@ const addProduct = async (csvRow: csvRow) => {
   }
 };
 
-router.post("/api/csv", async (req: Request, res: Response) => {
+router.post("/api/csv", requireAuth, async (req: Request, res: Response) => {
   const csvData: csvRow[] = req.body.rows;
   csvData.forEach((csvRow) => {
     addProduct(csvRow);
   });
-  res.status(201).send("Successfully added products from CSV file");
+
+  res.status(201).send("Successfully imported products from CSV file");
 });
 
 export { router as importCSVRouter };
