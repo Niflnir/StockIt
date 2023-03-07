@@ -354,7 +354,7 @@ export default {
     async updateproduct () {
       try {
         console.log(this.selected.image)
-        this.editBuffer.quantity = String(this.editBuffer.quantity)
+        this.editBuffer.product_id = String(this.editBuffer.product_id)
         this.editBuffer.quantity = Number(this.editBuffer.quantity)
         const res = await axios.put('https://www.stockit.live/api/shopify/products', {
           title: this.editBuffer.title,
