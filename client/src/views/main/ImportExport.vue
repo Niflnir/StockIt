@@ -54,7 +54,7 @@ export default {
     },
     async checkConnection () {
       try {
-        const res = await axios.get('https://stockit.live/api/shopify/checktoken')
+        const res = await axios.get('/api/shopify/checktoken')
         console.log(res)
         if (res.status === 200) {
           this.shopify = true

@@ -358,12 +358,12 @@ export default {
         this.editBuffer.quantity = Number(this.editBuffer.quantity)
         const res = await axios.put('https://www.stockit.live/api/shopify/products', {
           title: this.editBuffer.title,
-          description: this.editBuffer.desc,
+          description: this.selected.description,
           price: this.editBuffer.price,
           quantity: this.editBuffer.quantity,
           status: this.editBuffer.status,
           image: this.selected.image,
-          product_id: this.editBuffer.product_id
+          productId: this.editBuffer.product_id
         })
         console.log(res)
         if (res.status === 201) {
