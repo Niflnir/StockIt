@@ -45,8 +45,11 @@
                         <h4 class="card-title">${{grossSales}}K</h4>
                         <p class="mb-0">Gross Sales</p>
                   </template>
+                 <spinner className="spinner-border text-primary" role="status" v-if="!isTrendlineFetched">
+                   <spinnercontent className="visually-hidden">Loading...</spinnercontent>
+                 </spinner>
                   <template v-slot:body>
-                     <ApexChart element="d-main" :chartOption="dmain" />
+                     <ApexChart element="d-main" :chartOption="dmain" v-if="isTrendlineFetched"/>
                   </template>
                </iq-card>
             </div>
@@ -219,6 +222,8 @@ export default {
       totalOrders: 10000,
       grossSales: 0,
       colorLists: ['#3a57e8', '#079aa2', '#f7b924', '#78f724'],
+      products: [],
+      isTrendlineFetched: false,
       dmain: {
         series: [],
         chart: {
@@ -426,6 +431,7 @@ export default {
         duration: 800
       })
     }
+    this.isTrendlineFetched = false
     // query the back-end server for coockie
     const res = await axios.post('https://www.stockit.live/api/auth/login', {
       email: 'vaun890@gmail.com',
