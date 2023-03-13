@@ -5,10 +5,10 @@
     <div class="white-box">
       <div class="platform-display">
         <div class="display-row">
-          <div class="card" @click="apiget()" :class="{ green_outline: shopify }">
+          <div class="card" @click="shopify_link()" :class="{ green_outline: shopify }">
             <img src="../../assets/images/platforms/shopify.webp" class="card-img-top" alt="...">
           </div>
-          <div class="card">
+          <div class="card" @click="lazada_link()" :class="{ green_outline: lazada }">
             <img src="../../assets/images/platforms/lazada.png" class="card-img-top" alt="...">
           </div>
           <div class="card">
@@ -40,24 +40,42 @@ export default {
   name: 'App',
   data () {
     return {
-      shopify: false
+      shopify: false,
+      lazada: false
     }
   },
   mounted () {
-    this.checkConnection()
+    this.checkShopifyConnection()
+    this.checkLazadaConnection()
   },
   methods: {
-    apiget: async function () {
+    async shopify_link () {
       const res = await axios.get('https://www.stockit.live/api/shopify')
-      window.open(res.data, '_blank', 'noreferrer')
+      window.open(res.data, '_blank', 'popup=true')
       console.log(res)
     },
-    async checkConnection () {
+    async lazada_link () {
+      const res = await axios.get('https://www.stockit.live/api/lazada')
+      window.open(res.data, '_blank', 'popup=true')
+      console.log(res)
+    },
+    async checkShopifyConnection () {
       try {
         const res = await axios.get('/api/shopify/checktoken')
         console.log(res)
         if (res.status === 200) {
           this.shopify = true
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async checkLazadaConnection () {
+      try {
+        const res = await axios.get('/api/lazada/checktoken')
+        console.log(res)
+        if (res.status === 200) {
+          this.lazada = true
         }
       } catch (err) {
         console.log(err)
