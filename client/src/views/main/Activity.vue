@@ -5,7 +5,12 @@
         <h4 class="card-title mb-2">Activity overview</h4>
       </template>
       <template v-slot:body>
-        <div class=" d-flex profile-media align-items-top mb-2" v-for="activity in activities.slice(0, maxMessageSize)" v-bind:key="activity.id">
+        <div v-if="isLoading">
+          <spinner className="spinner-border text-primary" role="status">
+            <spinnercontent className="visually-hidden">Loading...</spinnercontent>
+          </spinner>
+        </div>
+        <div class=" d-flex profile-media align-items-top mb-2" v-for="activity in activities.slice(0, maxMessageSize)" v-bind:key="activity.id" v-else>
           <div class="profile-dots-pills border-primary mt-1"></div>
           <div class="ms-4">
             <h6 class=" mb-1">{{activity.Title}}</h6>
@@ -25,7 +30,8 @@ export default {
   },
   data () {
     return {
-      activities: []
+      activities: [],
+      isLoading: true
     }
   },
   async mounted () {
@@ -42,6 +48,7 @@ export default {
       activity.id = index
     })
     this.activities = activities.data
+    this.isLoading = false
   }
 }
 </script>
