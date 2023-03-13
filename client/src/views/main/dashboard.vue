@@ -58,17 +58,6 @@
                   <template v-slot:headerTitle>
                         <h4 class="card-title mb-2">Top selling products</h4>
                   </template>
-                  <template v-slot:headerAction>
-                     <div class="dropdown">
-                        <span class="dropdown-toggle" id="dropdownMenuButton7" data-bs-toggle="dropdown" aria-expanded="false" role="button">
-                        </span>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton7">
-                           <a class="dropdown-item " href="javascript:void(0);">Action</a>
-                           <a class="dropdown-item " href="javascript:void(0);">Another action</a>
-                           <a class="dropdown-item " href="javascript:void(0);">Something else here</a>
-                        </div>
-                     </div>
-                  </template>
                   <template v-slot:body>
                      <div class="table-responsive mt-4">
                         <table id="basic-table" class="table table-striped mb-0" role="grid">
