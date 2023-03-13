@@ -75,111 +75,18 @@
                            <thead>
                               <tr>
                                  <th>PRODUCT</th>
-                                 <th>URL</th>
                                  <th>ORDER</th>
                               </tr>
                            </thead>
                            <tbody>
-                              <tr>
+                              <tr v-for="product in products" v-bind:key="product.product_id">
                                  <td>
                                     <div class="d-flex align-items-center">
                                        <img class="bg-soft-primary rounded img-fluid avatar-40 me-3" src="@/assets/images/shapes/01.png" alt="profile">
-                                       <h6>Addidis Sportwear</h6>
+                                       <h6>{{product.title}}</h6>
                                     </div>
                                  </td>
-                                 <td>
-                                    <div class="iq-media-group iq-media-group-1">
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">SP</div>
-                                       </a>
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                       </a>
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">MM</div>
-                                       </a>
-                                    </div>
-                                 </td>
-                                 <td>$14,000</td>
-                              </tr>
-                              <tr>
-                                 <td>
-                                    <div class="d-flex align-items-center">
-                                       <img class="bg-soft-primary rounded img-fluid avatar-40 me-3" src="@/assets/images/shapes/05.png" alt="profile">
-                                       <h6>Netflixer Platforms</h6>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    <div class="iq-media-group iq-media-group-1">
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">SP</div>
-                                       </a>
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                       </a>
-                                    </div>
-                                 </td>
-                                 <td>$30,000</td>
-                              </tr>
-                              <tr>
-                                 <td>
-                                    <div class="d-flex align-items-center">
-                                       <img class="bg-soft-primary rounded img-fluid avatar-40 me-3" src="@/assets/images/shapes/02.png" alt="profile">
-                                       <h6>Shopifi Stores</h6>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    <div class="iq-media-group iq-media-group-1">
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                       </a>
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">TP</div>
-                                       </a>
-                                    </div>
-                                 </td>
-                                 <td>$8,500</td>
-                              </tr>
-                              <tr>
-                                 <td>
-                                    <div class="d-flex align-items-center">
-                                       <img class="bg-soft-primary rounded img-fluid avatar-40 me-3" src="@/assets/images/shapes/03.png" alt="profile">
-                                       <h6>Bootstrap Technologies</h6>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    <div class="iq-media-group iq-media-group-1">
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">SP</div>
-                                       </a>
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">PP</div>
-                                       </a>
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">MM</div>
-                                       </a>
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">TP</div>
-                                       </a>
-                                    </div>
-                                 </td>
-                                 <td>$20,500</td>
-                              </tr>
-                              <tr>
-                                 <td>
-                                    <div class="d-flex align-items-center">
-                                       <img class="bg-soft-primary rounded img-fluid avatar-40 me-3" src="@/assets/images/shapes/04.png" alt="profile">
-                                       <h6>Community First</h6>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    <div class="iq-media-group iq-media-group-1">
-                                       <a href="#" class="iq-media-1">
-                                          <div class="icon iq-icon-box-3 rounded-pill">MM</div>
-                                       </a>
-                                    </div>
-                                 </td>
-                                 <td>$9,800</td>
+                                 <td>${{product.price * product.quantity * 2}}</td>
                               </tr>
                            </tbody>
                         </table>
@@ -466,10 +373,20 @@ export default {
     this.grossSales = this.dmain.series[this.dmain.series.length - 1].data.reduce((acc, curr) => {
       return acc + curr
     }, 0)
+    this.isTrendlineFetched = true
+    // query products and select the first 10 products
+    const products = this.fetchItemList()
+    products.then((res) => {
+      this.products = res.slice(0, 10)
+    })
   },
   methods: {
     onClickActivityOverview () {
       this.$router.push('default/activity')
+    },
+    async fetchItemList () {
+      const res = await axios.get('https://www.stockit.live/api/allproducts')
+      return res.data
     }
   }
 }
