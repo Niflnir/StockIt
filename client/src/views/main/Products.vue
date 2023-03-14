@@ -56,7 +56,7 @@
             <div class="item">Product ID: {{ selected.product_id }}</div>
             <div class="item">Quantity: {{ selected.quantity }}</div>
             <div class="item">Price: {{ selected.price }}</div>
-            <div class="item">Platforms:</div>
+            <div class="item">Platforms: {{ selected.platform }}</div>
             <buttons buttonClass="btn-light editbtn" v-on:click="onClickEditButton">Edit</buttons>
           </div>
           <div v-else>
@@ -258,7 +258,7 @@ export default {
      * Update the selected item in the item list with user input new information.
      * Input validation included.
      */
-    onClickUpdateButton () {
+    async onClickUpdateButton () {
       // find the index of selected item based on product id
       const index = this.items.findIndex((item) => item.product_id === this.selected.product_id)
       // validate the input
@@ -276,7 +276,6 @@ export default {
       }
       // update the UI status
       this.updateproduct()
-      this.selected = this.items[index]
     },
     onClickAddProduct () {
       this.isAddProductMode = true
@@ -366,10 +365,10 @@ export default {
           productId: this.editBuffer.product_id
         })
         console.log(res)
-        if (res.status === 201) {
+        if (res.status === 200) {
           alert('Product Information has updated successfully')
           this.editBuffer = null
-          this.isEditMode = false
+          location.reload()
         }
       } catch (err) {
         console.log(err)
