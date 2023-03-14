@@ -260,7 +260,7 @@ export default {
      */
     async onClickUpdateButton () {
       // find the index of selected item based on product id
-      const index = this.items.findIndex((item) => item.product_id === this.selected.product_id)
+      // const index = this.items.findIndex((item) => item.product_id === this.selected.product_id)
       // validate the input
       if (this.editBuffer.title === '') {
         alert('Title cannot be empty')
