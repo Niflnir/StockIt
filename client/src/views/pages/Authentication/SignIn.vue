@@ -85,7 +85,7 @@ export default {
         if (res.status === 200) {
           this.success = true
           setTimeout(() => {
-            this.$router.push('/default')
+            this.$router.push('/default/import')
           }, 1500)
         }
       } catch (err) {
