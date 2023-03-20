@@ -336,6 +336,8 @@ export default {
     console.log(res)
     // query the activity endpoint
     const salesInfo = await axios.get('https://stockit.live/api/salesinfo')
+    // remove the element with 'platform' as 'Shopee'
+    salesInfo.data.totalGrossList = salesInfo.data.totalGrossList.filter(x => x.platform !== 'Shopee')
     console.log(salesInfo)
     // iterate over salesInfo's totalGrossList and push the values into the chart's series
     let counter = 1
